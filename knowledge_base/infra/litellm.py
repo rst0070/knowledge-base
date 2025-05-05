@@ -35,17 +35,9 @@ def _get_model_list(
 
 
 def get_litellm_router(
-    openai_api_key: Optional[str] = None,
-    openai_api_base: Optional[str] = None,
-    anthropic_api_key: Optional[str] = None,
-    anthropic_api_base: Optional[str] = None,
     gemini_api_key: Optional[str] = None
 ) -> Router:
     model_list = _get_model_list(
-        openai_api_key=openai_api_key,
-        openai_api_base=openai_api_base,
-        anthropic_api_key=anthropic_api_key,
-        anthropic_api_base=anthropic_api_base,
         gemini_api_key=gemini_api_key,
     )
     return Router(model_list=model_list)

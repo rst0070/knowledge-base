@@ -1,12 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Dict, Optional, Any
 
 
-class LLM(ABC):
+class LLMPort(ABC):
     @abstractmethod
-    def generate_response(self, messages: List[dict]) -> str:
-        pass
-
-    @abstractmethod
-    async def close(self):
+    async def generate_response(
+        self, 
+        messages: List[Dict[str, str]],
+        response_format=None,
+        tools: Optional[List[Dict]] = None,
+        tool_choice: str = "auto",
+    ) -> Any:
         pass

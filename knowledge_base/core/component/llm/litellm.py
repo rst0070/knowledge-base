@@ -1,11 +1,11 @@
 import json
 from typing import Dict, List, Optional
-
+import litellm
 from litellm import Router
-from knowledge_base.core.domain.port.llm import LLM
+from knowledge_base.core.domain.port.llm import LLMPort
 
 
-class LiteLLM(LLM):
+class LiteLLM(LLMPort):
     
     def __init__(
         self,
@@ -13,6 +13,7 @@ class LiteLLM(LLM):
         model_name: str,
     ):
         self.litellm_router = litellm_router
+        self.model_name = model_name
         self.config = {
             "model": model_name,
             "temperature": 0.5,
@@ -70,15 +71,15 @@ class LiteLLM(LLM):
         Returns:
             str: The generated response.
         """
-        if not self.litellm_router.supports_function_calling(self.config.model):
-            raise ValueError(f"Model '{self.config.model}' in litellm does not support function calling.")
+        if not litellm.supports_function_calling(self.model_name):
+            raise ValueError(f"Model '{self.model_name}' in litellm does not support function calling.")
 
         params = {
-            "model": self.config.model,
+            "model": self.model_name,
             "messages": messages,
-            "temperature": self.config.temperature,
-            "max_tokens": self.config.max_tokens,
-            "top_p": self.config.top_p,
+            "temperature": self.config["temperature"],
+            "max_tokens": self.config["max_tokens"],
+            "top_p": self.config["top_p"],
         }
         if response_format:
             params["response_format"] = response_format
