@@ -1,5 +1,21 @@
 services:
+
+  database:
+    container_name: kb-database
+    # pgvector docker image is integrated with postgres
+    image: pgvector/pgvector:0.8.0-pg17
+    environment:
+      POSTGRES_USER: moodmate
+      POSTGRES_PASSWORD: moodmate
+      POSTGRES_DB: moodmate
+    ports:
+      - "5432:5432"
+    volumes:
+      # - ./.data:/var/lib/postgresql/data
+      - ./config/postgres:/docker-entrypoint-initdb.d/
+
   kafka:
+    container_name: kb-kafka
     image: apache/kafka:latest
     ports:
       - "9092:9092"
@@ -30,6 +46,7 @@ services:
       KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
 
   kafka-ui:
+    container_name: kb-kafka-ui
     image: provectuslabs/kafka-ui:latest
     ports:
       - 8080:8080
@@ -41,6 +58,14 @@ services:
       - kafka-network
     # volumes:
     #   - ./config.yml:/etc/kafkaui/dynamic_config.yaml
+
+  kb-api:
+    container_name: kb-api
+    image: kb-api:latest
+    ports:
+      - 3000:3000
+    networks:
+      - kb-network
 
 networks:
   kafka-network:
