@@ -1,15 +1,18 @@
-from typing import Optional
+from typing import Optional, List
+from knowledge_base.core.domain.port.add_queue import AddQueue
+from knowledge_base.core.domain.entity.knowledge import Knowledge
+import asyncio
 
 
 class AddProducerUsecase:
-    def __init__(self, producer: Producer):
-        self.producer = producer
+    def __init__(self, add_queue: AddQueue, max_concurrency: int = 10):
+        self.add_queue = add_queue
+        self.semaphore = asyncio.Semaphore(max_concurrency)
 
-    def execute(
+    async def execute(
         self, 
-        user_id: str, 
-        data: str, 
-        run_id: Optional[str] = None,
-        metadata: Optional[dict] = None
+        batch: List[Knowledge]
     ):
-        self.producer.add(user_id, data, run_id, metadata)
+        async with self.semaphore:
+            async for knowledge in batch:
+                await self.add_queue.put(knowledge)
