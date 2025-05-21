@@ -30,7 +30,7 @@ async def add(
                 metadata=item.metadata,
             )
         )
-        
+
     await usecase.execute(
         batch=batch
     )

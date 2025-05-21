@@ -13,6 +13,8 @@ services:
     volumes:
       # - ./.data:/var/lib/postgresql/data
       - ./config/postgres:/docker-entrypoint-initdb.d/
+    networks:
+      - kb-network
 
   kafka:
     container_name: kb-kafka
@@ -21,7 +23,7 @@ services:
       - "9092:9092"
       - "29092:29092"
     networks:
-      - kafka-networks
+      - kb-network
     environment:
       KAFKA_NODE_ID: 1
       # id between kafka cluster
@@ -55,18 +57,18 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: 'kafka:9092'
       KAFKA_CLUSTERS_0_NAME: 'local'
     networks:
-      - kafka-network
+      - kb-network
     # volumes:
     #   - ./config.yml:/etc/kafkaui/dynamic_config.yaml
 
-  kb-api:
-    container_name: kb-api
-    image: kb-api:latest
-    ports:
-      - 3000:3000
-    networks:
-      - kb-network
+  # kb-api:
+  #   container_name: kb-api
+  #   image: kb-api:latest
+  #   ports:
+  #     - 3000:3000
+  #   networks:
+  #     - kb-network
 
 networks:
-  kafka-network:
+  kb-network:
     driver: bridge
