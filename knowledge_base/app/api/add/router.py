@@ -3,7 +3,7 @@ from .dto import (
     AddResponse,
 )
 from fastapi import APIRouter, Depends
-from knowledge_base.present.api.di.container import Container
+from knowledge_base.app.api.di.container import Container
 from dependency_injector.wiring import inject, Provide
 from knowledge_base.core.domain.entity.knowledge import Knowledge
 from knowledge_base.core.domain.usecase.add_producer import AddProducerUsecase
