@@ -49,3 +49,12 @@ class GraphRepository(ABC):
         - if the source or target vertex already exists, it will be updated.
         """
         pass
+
+    async def delete_edges(
+        self,
+        edges: List[Edge],
+    ):
+        """
+        Delete the given edges.
+        """
+        pass

@@ -54,6 +54,52 @@ class VertexExtractionService:
         return vertices
 
 
+class VertexExtractionFromQueryService:
+    def __init__(self, llm: LLMPort, embedder: Embedder):
+        self.llm = llm
+        self.embedder = embedder
+
+        self.vertex_extraction_from_query_prompt = ""
+        with open(
+            os.path.join(
+                os.path.dirname(__file__),
+                "../prompt",
+                "vertex_extraction_from_query.txt",
+            ),
+            "r",
+        ) as f:
+            self.vertex_extraction_from_query_prompt = f.read()
+
+    async def execute(self, system_id: str, query: str) -> List[Vertex]:
+        """
+        Extract vertices(entities) from the given query.
+        """
+        result = await self.llm.generate_response(
+            messages=[
+                {
+                    "role": "system",
+                    "content": self.vertex_extraction_from_query_prompt,
+                },
+                {
+                    "role": "user",
+                    "content": query,
+                },
+            ]
+        )
+        result = json.loads(result)
+
+        vertices = []
+        for vertex in result:
+            vertices.append(
+                Vertex(
+                    system_id=system_id,
+                    data=vertex["data"],
+                    data_type=vertex["data_type"],
+                )
+            )
+        return vertices
+
+
 class EdgeExtractionService:
     def __init__(
         self,

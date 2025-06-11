@@ -16,16 +16,16 @@ Add a new edge if it meets any of these criteria:
 
 ## Examples
 
-### Example 1: Add New and More Specific Information
+### Example 1: Scientific Discoveries - Add New and More Specific Information
 **Input:**
 ```xml
 <old-edges>
 [
   {
     "id": 1,
-    "source": {"data": "Steve Jobs", "data_type": "person"},
-    "target": {"data": "Apple Inc.", "data_type": "organization"},
-    "data": "worked at"
+    "source": {"data": "Marie Curie", "data_type": "person"},
+    "target": {"data": "Radium", "data_type": "element"},
+    "data": "studied"
   }
 ]
 </old-edges>
@@ -34,15 +34,15 @@ Add a new edge if it meets any of these criteria:
 [
   {
     "id": 101,
-    "source": {"data": "Steve Jobs", "data_type": "person"},
-    "target": {"data": "Apple Inc.", "data_type": "organization"},
-    "data": "co-founded"
+    "source": {"data": "Marie Curie", "data_type": "person"},
+    "target": {"data": "Radium", "data_type": "element"},
+    "data": "discovered"
   },
   {
     "id": 102,
-    "source": {"data": "Steve Jobs", "data_type": "person"},
-    "target": {"data": "iPhone", "data_type": "product"),
-    "data": "introduced"
+    "source": {"data": "Marie Curie", "data_type": "person"},
+    "target": {"data": "Nobel Prize in Chemistry", "data_type": "award"},
+    "data": "won in 1911"
   }
 ]
 </new-edges>
@@ -55,24 +55,24 @@ Add a new edge if it meets any of these criteria:
 }
 ```
 
-**Reasoning**: Add 101 because "co-founded" is more specific than "worked at". Add 102 because it's completely new information about Steve Jobs and iPhone.
+**Reasoning**: Add 101 because "discovered" is more specific than "studied". Add 102 because it's completely new award information.
 
-### Example 2: Don't Add Redundant Information
+### Example 2: Literature - Don't Add Redundant Information
 **Input:**
 ```xml
 <old-edges>
 [
   {
     "id": 2,
-    "source": {"data": "Albert Einstein", "data_type": "person"},
-    "target": {"data": "Princeton University", "data_type": "organization"},
-    "data": "professor at"
+    "source": {"data": "Harper Lee", "data_type": "person"},
+    "target": {"data": "To Kill a Mockingbird", "data_type": "book"},
+    "data": "authored"
   },
   {
     "id": 3,
-    "source": {"data": "Albert Einstein", "data_type": "person"},
-    "target": {"data": "Theory of Relativity", "data_type": "concept"},
-    "data": "developed"
+    "source": {"data": "To Kill a Mockingbird", "data_type": "book"},
+    "target": {"data": "1960", "data_type": "year"},
+    "data": "published in"
   }
 ]
 </old-edges>
@@ -81,15 +81,15 @@ Add a new edge if it meets any of these criteria:
 [
   {
     "id": 103,
-    "source": {"data": "Albert Einstein", "data_type": "person"},
-    "target": {"data": "Princeton University", "data_type": "organization"},
-    "data": "worked at"
+    "source": {"data": "Harper Lee", "data_type": "person"},
+    "target": {"data": "To Kill a Mockingbird", "data_type": "book"},
+    "data": "wrote"
   },
   {
     "id": 104,
-    "source": {"data": "Albert Einstein", "data_type": "person"},
-    "target": {"data": "Nobel Prize", "data_type": "award"},
-    "data": "received"
+    "source": {"data": "To Kill a Mockingbird", "data_type": "book"},
+    "target": {"data": "Pulitzer Prize", "data_type": "award"},
+    "data": "won"
   }
 ]
 </new-edges>
@@ -102,24 +102,24 @@ Add a new edge if it meets any of these criteria:
 }
 ```
 
-**Reasoning**: Don't add 103 because "worked at" is less specific than existing "professor at". Add 104 because it's new valuable information.
+**Reasoning**: Don't add 103 because "wrote" is essentially the same as "authored". Add 104 because it's new valuable award information.
 
-### Example 3: Add Different Aspects and Updated Information
+### Example 3: Geography and Medicine - Different Aspects and Updated Information
 **Input:**
 ```xml
 <old-edges>
 [
   {
     "id": 4,
-    "source": {"data": "Tesla Inc.", "data_type": "organization"},
-    "target": {"data": "Electric Vehicles", "data_type": "category"},
-    "data": "manufactures"
+    "source": {"data": "Amazon River", "data_type": "river"},
+    "target": {"data": "South America", "data_type": "continent"},
+    "data": "flows through"
   },
   {
     "id": 5,
-    "source": {"data": "Elon Musk", "data_type": "person"},
-    "target": {"data": "Tesla Inc.", "data_type": "organization"},
-    "data": "founder of"
+    "source": {"data": "Penicillin", "data_type": "medicine"},
+    "target": {"data": "Bacteria", "data_type": "organism"},
+    "data": "fights"
   }
 ]
 </old-edges>
@@ -128,21 +128,21 @@ Add a new edge if it meets any of these criteria:
 [
   {
     "id": 105,
-    "source": {"data": "Tesla Inc.", "data_type": "organization"},
-    "target": {"data": "Autonomous Driving", "data_type": "technology"},
-    "data": "develops"
+    "source": {"data": "Amazon River", "data_type": "river"},
+    "target": {"data": "6,400 km", "data_type": "measurement"},
+    "data": "length is"
   },
   {
     "id": 106,
-    "source": {"data": "Elon Musk", "data_type": "person"},
-    "target": {"data": "Tesla Inc.", "data_type": "organization"},
-    "data": "CEO of"
+    "source": {"data": "Penicillin", "data_type": "medicine"},
+    "target": {"data": "Alexander Fleming", "data_type": "person"},
+    "data": "discovered by"
   },
   {
     "id": 107,
-    "source": {"data": "Tesla Inc.", "data_type": "organization"},
-    "target": {"data": "Electric Cars", "data_type": "category"},
-    "data": "produces"
+    "source": {"data": "Amazon River", "data_type": "river"},
+    "target": {"data": "Brazil", "data_type": "country"},
+    "data": "located in"
   }
 ]
 </new-edges>
@@ -155,24 +155,24 @@ Add a new edge if it meets any of these criteria:
 }
 ```
 
-**Reasoning**: Add 105 (new technology relationship). Add 106 (more specific current role than "founder of"). Don't add 107 as it's essentially the same as existing "manufactures Electric Vehicles".
+**Reasoning**: Add 105 (new measurement information). Add 106 (new discovery relationship). Don't add 107 as it's less specific than existing "flows through South America".
 
-### Example 4: Avoid Contradictory Information
+### Example 4: Sports and Arts - Temporal and Role Information
 **Input:**
 ```xml
 <old-edges>
 [
   {
     "id": 6,
-    "source": {"data": "Google", "data_type": "organization"},
-    "target": {"data": "Android", "data_type": "product"},
-    "data": "acquired in 2005"
+    "source": {"data": "Serena Williams", "data_type": "person"},
+    "target": {"data": "Tennis", "data_type": "sport"},
+    "data": "plays"
   },
   {
     "id": 7,
-    "source": {"data": "Larry Page", "data_type": "person"},
-    "target": {"data": "Google", "data_type": "organization"},
-    "data": "co-founder of"
+    "source": {"data": "Vincent van Gogh", "data_type": "person"},
+    "target": {"data": "The Starry Night", "data_type": "painting"},
+    "data": "created"
   }
 ]
 </old-edges>
@@ -181,15 +181,21 @@ Add a new edge if it meets any of these criteria:
 [
   {
     "id": 108,
-    "source": {"data": "Google", "data_type": "organization"},
-    "target": {"data": "Android", "data_type": "product"},
-    "data": "acquired in 2007"
+    "source": {"data": "Serena Williams", "data_type": "person"},
+    "target": {"data": "23 Grand Slam titles", "data_type": "achievement"},
+    "data": "holds record of"
   },
   {
     "id": 109,
-    "source": {"data": "Google", "data_type": "organization"},
-    "target": {"data": "Search Engine", "data_type": "service"},
-    "data": "provides"
+    "source": {"data": "Vincent van Gogh", "data_type": "person"},
+    "target": {"data": "1889", "data_type": "year"},
+    "data": "painted The Starry Night in"
+  },
+  {
+    "id": 110,
+    "source": {"data": "Serena Williams", "data_type": "person"},
+    "target": {"data": "Professional Tennis", "data_type": "sport"},
+    "data": "competes in"
   }
 ]
 </new-edges>
@@ -202,7 +208,54 @@ Add a new edge if it meets any of these criteria:
 }
 ```
 
-**Reasoning**: Add 108 as it provides corrected date information. Add 109 as it's new service relationship information.
+**Reasoning**: Add 108 (new achievement record). Add 109 (adds temporal context to existing creation). Don't add 110 as it's essentially the same as existing "plays Tennis".
+
+### Example 5: Technology and Nature - Corrected Information
+**Input:**
+```xml
+<old-edges>
+[
+  {
+    "id": 8,
+    "source": {"data": "Mount Everest", "data_type": "mountain"},
+    "target": {"data": "8,840 meters", "data_type": "measurement"},
+    "data": "height is"
+  },
+  {
+    "id": 9,
+    "source": {"data": "DNA", "data_type": "molecule"},
+    "target": {"data": "Double helix", "data_type": "structure"},
+    "data": "has structure"
+  }
+]
+</old-edges>
+
+<new-edges>
+[
+  {
+    "id": 111,
+    "source": {"data": "Mount Everest", "data_type": "mountain"},
+    "target": {"data": "8,848.86 meters", "data_type": "measurement"},
+    "data": "height is"
+  },
+  {
+    "id": 112,
+    "source": {"data": "DNA", "data_type": "molecule"},
+    "target": {"data": "Genetic information", "data_type": "concept"},
+    "data": "stores"
+  }
+]
+</new-edges>
+```
+
+**Output:**
+```json
+{
+  "ids": [111, 112]
+}
+```
+
+**Reasoning**: Add 111 as it provides more precise/updated height measurement. Add 112 as it represents a different aspect of DNA (function vs structure).
 
 ## Guidelines
 - Add edges that provide genuine new value to the knowledge graph
