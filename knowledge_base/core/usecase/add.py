@@ -26,6 +26,7 @@ class AddKnowledgeUsecase:
         vertices = await self.vertex_extraction_service.execute(
             knowledge.system_id, knowledge.text
         )
+
         await self.edge_extraction_service.execute(
             knowledge.system_id, knowledge.text, vertices
         )
@@ -33,4 +34,6 @@ class AddKnowledgeUsecase:
         await self.search_service.execute(knowledge.system_id, vertices)
 
         # TODO:
-        # 1. Resolve Conflict b/w Old and New Relationship
+        # find
+        # - what to delete
+        # - what to add
