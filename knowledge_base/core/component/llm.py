@@ -2,11 +2,10 @@ import json
 from typing import Dict, List, Optional
 import litellm
 from litellm import Router
-from knowledge_base.core.domain.port.llm import LLMPort
+from knowledge_base.core.port.llm import LLMPort
 
 
 class LiteLLM(LLMPort):
-    
     def __init__(
         self,
         litellm_router: Router,
@@ -20,8 +19,7 @@ class LiteLLM(LLMPort):
             "max_tokens": 1000,
             "top_p": 1,
         }
-        
-        
+
     def _parse_response(self, response, tools):
         """
         Process the response based on whether tools are used or not.
@@ -59,20 +57,9 @@ class LiteLLM(LLMPort):
         tools: Optional[List[Dict]] = None,
         tool_choice: str = "auto",
     ):
-        """
-        Generate a response based on the given messages using Litellm.
-
-        Args:
-            messages (list): List of message dicts containing 'role' and 'content'.
-            response_format (str or object, optional): Format of the response. Defaults to "text".
-            tools (list, optional): List of tools that the model can call. Defaults to None.
-            tool_choice (str, optional): Tool choice method. Defaults to "auto".
-
-        Returns:
-            str: The generated response.
-        """
+        """ """
         if not litellm.supports_function_calling(self.model_name):
-            raise ValueError(f"Model '{self.model_name}' in litellm does not support function calling.")
+            raise ValueError(f"'{self.model_name}' does not support function calling.")
 
         params = {
             "model": self.model_name,
@@ -83,7 +70,9 @@ class LiteLLM(LLMPort):
         }
         if response_format:
             params["response_format"] = response_format
-        if tools:  # TODO: Remove tools if no issues found with new memory addition logic
+        if (
+            tools
+        ):  # TODO: Remove tools if no issues found with new memory addition logic
             params["tools"] = tools
             params["tool_choice"] = tool_choice
 
