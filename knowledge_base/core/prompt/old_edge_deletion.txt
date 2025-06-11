@@ -1,0 +1,253 @@
+You are a knowledge graph expert tasked with identifying outdated or redundant edges that should be deleted from a Neo4j graph database.
+
+## Task
+Given a set of existing edges (`old_edges`) and newly extracted edges (`new_edges`), determine which old edges should be deleted to maintain an accurate and up-to-date knowledge graph.
+
+## Input Format
+You will receive two sections with old edges (existing in database) and new edges (newly extracted).
+
+## Deletion Rules
+Delete an old edge if it meets any of these criteria:
+1. **Superseded Relationship**: A new edge exists with the same source and target but provides more accurate or updated relationship information
+2. **Contradictory Information**: An old edge contradicts information provided by new edges
+3. **Redundant Information**: An old edge provides essentially the same information as a new edge but with less precision or accuracy
+4. **Outdated Information**: An old edge represents information that is no longer current or relevant
+
+## Examples
+
+### Example 1: Scientific Discoveries - Superseded Relationship
+**Input:**
+```xml
+<old-edges>
+[
+  {
+    "id": 1,
+    "source": {"data": "Marie Curie", "data_type": "person"},
+    "target": {"data": "Radium", "data_type": "element"},
+    "data": "studied"
+  },
+  {
+    "id": 2,
+    "source": {"data": "DNA", "data_type": "molecule"},
+    "target": {"data": "James Watson", "data_type": "person"},
+    "data": "researched by"
+  }
+]
+</old-edges>
+
+<new-edges>
+[
+  {
+    "source": {"data": "Marie Curie", "data_type": "person"},
+    "target": {"data": "Radium", "data_type": "element"},
+    "data": "discovered"
+  },
+  {
+    "source": {"data": "DNA", "data_type": "molecule"},
+    "target": {"data": "James Watson", "data_type": "person"},
+    "data": "structure discovered by"
+  }
+]
+</new-edges>
+```
+
+**Output:**
+```json
+{
+  "ids": [1, 2]
+}
+```
+
+**Reasoning**: "discovered" is more specific and accurate than "studied" for Marie Curie. "structure discovered by" is more precise than "researched by" for Watson's DNA work.
+
+### Example 2: Literature and Geography - Preserve Different Aspects
+**Input:**
+```xml
+<old-edges>
+[
+  {
+    "id": 3,
+    "source": {"data": "Shakespeare", "data_type": "person"},
+    "target": {"data": "England", "data_type": "country"},
+    "data": "lived in"
+  },
+  {
+    "id": 4,
+    "source": {"data": "Amazon River", "data_type": "river"},
+    "target": {"data": "Atlantic Ocean", "data_type": "water_body"},
+    "data": "flows into"
+  }
+]
+</old-edges>
+
+<new-edges>
+[
+  {
+    "source": {"data": "Shakespeare", "data_type": "person"},
+    "target": {"data": "Stratford-upon-Avon", "data_type": "city"},
+    "data": "born in"
+  }
+]
+</new-edges>
+```
+
+**Output:**
+```json
+{
+  "ids": []
+}
+```
+
+**Reasoning**: Keep id 3 because "lived in England" and "born in Stratford-upon-Avon" represent different aspects of Shakespeare's geography. Keep id 4 as no new information about Amazon River is provided.
+
+### Example 3: Sports and Medicine - Contradictory Information
+**Input:**
+```xml
+<old-edges>
+[
+  {
+    "id": 5,
+    "source": {"data": "Olympics 2020", "data_type": "event"},
+    "target": {"data": "Tokyo", "data_type": "city"},
+    "data": "held in 2020"
+  },
+  {
+    "id": 6,
+    "source": {"data": "Penicillin", "data_type": "medicine"},
+    "target": {"data": "1920", "data_type": "year"},
+    "data": "discovered in"
+  }
+]
+</old-edges>
+
+<new-edges>
+[
+  {
+    "source": {"data": "Olympics 2020", "data_type": "event"},
+    "target": {"data": "Tokyo", "data_type": "city"},
+    "data": "held in 2021"
+  },
+  {
+    "source": {"data": "Penicillin", "data_type": "medicine"},
+    "target": {"data": "1928", "data_type": "year"},
+    "data": "discovered in"
+  }
+]
+</new-edges>
+```
+
+**Output:**
+```json
+{
+  "ids": [5, 6]
+}
+```
+
+**Reasoning**: The Olympics were actually held in 2021 due to COVID-19 postponement, so delete id 5. Penicillin was discovered in 1928, not 1920, so delete id 6 for the corrected date.
+
+### Example 4: Arts and Nature - More Specific Information
+**Input:**
+```xml
+<old-edges>
+[
+  {
+    "id": 7,
+    "source": {"data": "Van Gogh", "data_type": "person"},
+    "target": {"data": "Paintings", "data_type": "art_form"},
+    "data": "created"
+  },
+  {
+    "id": 8,
+    "source": {"data": "Mount Everest", "data_type": "mountain"},
+    "target": {"data": "Himalayas", "data_type": "mountain_range"},
+    "data": "located in"
+  }
+]
+</old-edges>
+
+<new-edges>
+[
+  {
+    "source": {"data": "Van Gogh", "data_type": "person"},
+    "target": {"data": "Post-Impressionist paintings", "data_type": "art_form"},
+    "data": "created"
+  },
+  {
+    "source": {"data": "Mount Everest", "data_type": "mountain"},
+    "target": {"data": "Nepal-Tibet border", "data_type": "location"},
+    "data": "located on"
+  }
+]
+</new-edges>
+```
+
+**Output:**
+```json
+{
+  "ids": [7, 8]
+}
+```
+
+**Reasoning**: "Post-Impressionist paintings" is more specific than just "Paintings" for Van Gogh. "Nepal-Tibet border" is more precise than "Himalayas" for Mount Everest's location.
+
+### Example 5: Technology and History - Updated vs Outdated Information
+**Input:**
+```xml
+<old-edges>
+[
+  {
+    "id": 9,
+    "source": {"data": "World War II", "data_type": "event"},
+    "target": {"data": "1945", "data_type": "year"},
+    "data": "ended in"
+  },
+  {
+    "id": 10,
+    "source": {"data": "Pluto", "data_type": "celestial_body"},
+    "target": {"data": "Planet", "data_type": "classification"},
+    "data": "classified as"
+  }
+]
+</old-edges>
+
+<new-edges>
+[
+  {
+    "source": {"data": "World War II", "data_type": "event"},
+    "target": {"data": "September 2, 1945", "data_type": "date"},
+    "data": "ended on"
+  },
+  {
+    "source": {"data": "Pluto", "data_type": "celestial_body"},
+    "target": {"data": "Dwarf Planet", "data_type": "classification"},
+    "data": "classified as"
+  }
+]
+</new-edges>
+```
+
+**Output:**
+```json
+{
+  "ids": [9, 10]
+}
+```
+
+**Reasoning**: "September 2, 1945" is more specific than just "1945" for WWII end. Pluto was reclassified as a "Dwarf Planet" in 2006, so the old "Planet" classification is outdated.
+
+## Guidelines
+- Only delete edges when there's clear justification
+- Preserve edges that represent different aspects or time periods
+- When in doubt, preserve rather than delete
+- Consider semantic similarity, not just exact matches
+
+## Output Format
+Provide your response as a JSON object containing only the IDs of edges to be deleted:
+
+```json
+{
+  "ids": [1, 3, 5]
+}
+```
+
+Now analyze the provided edges and determine which old edges should be deleted.
