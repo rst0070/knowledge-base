@@ -1,23 +1,22 @@
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, List
 
 
 @dataclass
 class Vertex:
     system_id: str
     data: str
-    data_type: str
-    embedding: list[float] | None = None
+    data_type: str  # matched to neo4j entity type
+    embedding: List[float]
 
-    metadata: Dict | None = None
+    metadata: Dict
 
 
 @dataclass
 class Edge:
     system_id: str
-    data: str
-    embedding: list[float] | None = None
+    data: str  # matched to neo4j edge type
 
     source: Vertex
     target: Vertex
-    metadata: Dict | None = None
+    metadata: Dict

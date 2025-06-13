@@ -1,7 +1,8 @@
 from knowledge_base.core.port.llm import LLMPort
 from knowledge_base.core.port.embedder import Embedder
 from knowledge_base.core.entity.graph import Vertex, Edge
-from typing import List
+from typing import List, Optional, Dict
+from dataclasses import asdict
 import json
 import os
 
@@ -17,14 +18,18 @@ class VertexExtractionService:
 
         self.vertex_extraction_prompt = ""
         with open(
-            os.path.join(
-                os.path.dirname(__file__), "../prompt", "vertex_extraction.txt"
+            os.path.realpath(
+                os.path.join(
+                    os.path.dirname(__file__), "../prompt", "vertex_extraction.txt"
+                )
             ),
             "r",
         ) as f:
             self.vertex_extraction_prompt = f.read()
 
-    async def execute(self, system_id: str, text: str) -> List[Vertex]:
+    async def execute(
+        self, system_id: str, text: str, metadata: Optional[Dict] = None
+    ) -> List[Vertex]:
         """
         Extract vertices(entities) from the given text.
         """
@@ -38,8 +43,10 @@ class VertexExtractionService:
                     "role": "user",
                     "content": text,
                 },
-            ]
+            ],
+            response_format={"type": "json_object"},
         )
+        print(result)
         result = json.loads(result)
 
         vertices = []
@@ -48,7 +55,9 @@ class VertexExtractionService:
                 Vertex(
                     system_id=system_id,
                     data=vertex["data"],
-                    data_type=vertex["data_type"],
+                    data_type=vertex["data_type"].replace(" ", "_"),
+                    embedding=self.embedder.embed(vertex["data"]),
+                    metadata=metadata or {},
                 )
             )
         return vertices
@@ -61,16 +70,20 @@ class VertexExtractionFromQueryService:
 
         self.vertex_extraction_from_query_prompt = ""
         with open(
-            os.path.join(
-                os.path.dirname(__file__),
-                "../prompt",
-                "vertex_extraction_from_query.txt",
+            os.path.realpath(
+                os.path.join(
+                    os.path.dirname(__file__),
+                    "../prompt",
+                    "vertex_extraction_from_query.txt",
+                )
             ),
             "r",
         ) as f:
             self.vertex_extraction_from_query_prompt = f.read()
 
-    async def execute(self, system_id: str, query: str) -> List[Vertex]:
+    async def execute(
+        self, system_id: str, query: str, metadata: Optional[Dict] = None
+    ) -> List[Vertex]:
         """
         Extract vertices(entities) from the given query.
         """
@@ -84,7 +97,8 @@ class VertexExtractionFromQueryService:
                     "role": "user",
                     "content": query,
                 },
-            ]
+            ],
+            response_format={"type": "json_object"},
         )
         result = json.loads(result)
 
@@ -94,7 +108,9 @@ class VertexExtractionFromQueryService:
                 Vertex(
                     system_id=system_id,
                     data=vertex["data"],
-                    data_type=vertex["data_type"],
+                    data_type=vertex["data_type"].replace(" ", "_").replace("'", "_"),
+                    embedding=self.embedder.embed(vertex["data"]),
+                    metadata=metadata or {},
                 )
             )
         return vertices
@@ -110,18 +126,26 @@ class EdgeExtractionService:
         self.embedder = embedder
         self.edge_extraction_prompt = ""
         with open(
-            os.path.join(os.path.dirname(__file__), "../prompt", "edge_extraction.txt"),
+            os.path.realpath(
+                os.path.join(
+                    os.path.dirname(__file__), "../prompt", "edge_extraction.txt"
+                )
+            ),
             "r",
         ) as f:
             self.edge_extraction_prompt = f.read()
 
     async def execute(
-        self, system_id: str, text: str, vertices: List[Vertex]
+        self,
+        system_id: str,
+        text: str,
+        vertices: List[Vertex],
+        metadata: Optional[Dict] = None,
     ) -> List[Edge]:
         """
         Extract edges(relationships) between the given vertices from the given text.
         """
-        vertices_json = [vertex.model_dump() for vertex in vertices]
+        vertices_json = [asdict(vertex) for vertex in vertices]
         result = await self.llm.generate_response(
             messages=[
                 {
@@ -134,11 +158,14 @@ class EdgeExtractionService:
                         {
                             "text-source": text,
                             "vertices": vertices_json,
-                        }
+                        },
+                        ensure_ascii=False,
                     ),
                 },
-            ]
+            ],
+            response_format={"type": "json_object"},
         )
+        print("edge extraction result: ", result)
         result = json.loads(result)
         edges = []
         for edge in result:
@@ -158,9 +185,10 @@ class EdgeExtractionService:
             edges.append(
                 Edge(
                     system_id=system_id,
-                    data=edge["relationship"],
+                    data=edge["relationship"].replace(" ", "_").replace("'", "_"),
                     source=source,
                     target=target,
+                    metadata=metadata or {},
                 )
             )
         return edges

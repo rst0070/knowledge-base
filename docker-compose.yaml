@@ -1,20 +1,18 @@
 services:
 
-  database:
-    container_name: kb-database
-    # pgvector docker image is integrated with postgres
-    image: pgvector/pgvector:0.8.0-pg17
+  neo4j:
+    image: neo4j:5.26.8-community
+    # volumes:
+    #     - /$HOME/neo4j/logs:/logs
+    #     - /$HOME/neo4j/config:/config
+    #     - /$HOME/neo4j/data:/data
+    #     - /$HOME/neo4j/plugins:/plugins
     environment:
-      POSTGRES_USER: moodmate
-      POSTGRES_PASSWORD: moodmate
-      POSTGRES_DB: moodmate
+        - NEO4J_AUTH=neo4j/thisispasswd
     ports:
-      - "5432:5432"
-    volumes:
-      # - ./.data:/var/lib/postgresql/data
-      - ./config/postgres:/docker-entrypoint-initdb.d/
-    networks:
-      - kb-network
+      - "7474:7474"
+      - "7687:7687"
+    restart: always
 
   kafka:
     container_name: kb-kafka

@@ -1,12 +1,11 @@
-#from mcp.server.fastmcp import FastMCP
+# from mcp.server.fastmcp import FastMCP
 from fastapi import FastAPI
-from fastapi_mcp import FastApiMCP
 from functools import partial
 from dotenv import load_dotenv
-from knowledge_base.app.api.di.config import BaseConfig
-from knowledge_base.app.api.di.container import Container
-from knowledge_base.app.api.add.router import add_router
+from knowledge_base.di.config import BaseConfig
+from knowledge_base.di.container import Container
 from knowledge_base.app.api.health.router import health_router
+from knowledge_base.app.api.experimental.router import router
 
 
 async def lifespan(app: FastAPI):
@@ -17,12 +16,12 @@ async def lifespan(app: FastAPI):
     container.unwire()
     container.wire(
         modules=[
-            "knowledge_base.app.api.add.router",
+            "knowledge_base.app.api.experimental.router",
         ]
     )
 
     app.state.container = container
-    app.include_router(add_router)
+    app.include_router(router)
     app.include_router(health_router)
 
     yield
@@ -32,18 +31,8 @@ async def lifespan(app: FastAPI):
 
 def get_application():
     app = FastAPI(lifespan=partial(lifespan))
-    
+
     return app
 
 
 app = get_application()
-
-mcp = FastApiMCP(
-    app
-)
-
-mcp.mount()
-
-@app.get("/users/{user_id}", operation_id="get_user_info")
-async def read_user(user_id: int):
-    return {"user_id": user_id}

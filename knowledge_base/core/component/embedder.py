@@ -9,4 +9,5 @@ class FastEmbed(Embedder):
     def embed(self, text: str) -> list[float]:
         embedding_generator = self.embedding_model.embed(text)
         embedding = list(embedding_generator)
+        embedding = embedding[0].tolist()
         return embedding
