@@ -1,4 +1,3 @@
-from knowledge_base.core.port.embedder import Embedder
 from knowledge_base.core.port.llm import LLMPort
 from knowledge_base.core.entity.graph import Edge
 from knowledge_base.core.port.graph import GraphRepository
@@ -11,11 +10,9 @@ class AddNewEdgeService:
     def __init__(
         self,
         llm: LLMPort,
-        embedder: Embedder,
         graph_repository: GraphRepository,
     ):
         self.llm = llm
-        self.embedder = embedder
         self.graph_repository = graph_repository
 
         with open(
@@ -73,10 +70,10 @@ class AddNewEdgeService:
                     "role": "user",
                     "content": f"""
                     <old-edges>
-                    {json.dumps(_old_edges)}
+                    {json.dumps(_old_edges, ensure_ascii=False)}
                     </old-edges>
                     <new-edges>
-                    {json.dumps(_new_edges)}
+                    {json.dumps(_new_edges, ensure_ascii=False)}
                     </new-edges>
                     """,
                 },
