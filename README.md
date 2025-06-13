@@ -22,8 +22,8 @@ flowchart TD
   neo4j[(Graph DB)]
 
   subgraph api-application
-    add_api[POST /v1/add]
-    search_api[GET /v1/search]
+    add_api[POST /v1/knowledge]
+    search_api[GET /v1/knowledge]
 
     subgraph search-usecase
       ss1[extract vertices]
