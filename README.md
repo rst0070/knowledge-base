@@ -1,81 +1,62 @@
 # Knowledge Base
-This project is a knowledge base system for ai assistant for human-ai interactive diary application.  
-  
+This project is a graph-db based knowledge-base system.
+This code extract and update knowledge leveraging llm with producer-consumer architecture.
+
 ## project structure
+- app
+  - add_consumer - entry point of `add_consumer` app
+  - api - entry point of `api` app
 - core
-    - components
-    - domain
-        - entity
-            knowledge.py
-        - usecase
-            add_producer.py
-            add_consumer.py
-            search.py
+  - component: implemtation of port
+  - entity
+  - port: interface connecting outside and inside of core logic
+  - prompt
+  - service: combining ports, implements detail logic
+  - usecase: business logic
 - infra
-    litellm
-- present
-    - search
-    - add
 
 ## Design of actions
-__Add: Save diary__  
-Add action is triggered when user saves diary or enter chat messages to ai assistant.  
-1. Data processing from backend app
-2. Presentation layer of knowledge base app
-3. Trigger add producer usecase
-4. Producer puts the data into queue (kafka)
-5. Consumer gets the data from the queue
-    a. Extract knowledge leveraging LLM
-    b. Search similar knowledge by vector search <-> pgvector store
-    c. Distinguish add, update, and delete actions on knowledges
-    d. Do the actions
-
 ```mermaid
 flowchart TD
-    frontend[Frontend App]
-    backend[Backend App] <-->|Save and find|database[(Postgresql-pgvector)]
+  kafka[(Kafka Queue)]
+  neo4j[(Graph DB)]
 
+  subgraph api-application
+    add_api[POST /v1/add]
+    search_api[GET /v1/search]
 
-    frontend -->|User saves diary/chat| backend
+    subgraph search-usecase
+      ss1[extract vertices]
+      ss2[search existing edges]
 
-    backend -->|Send to KB| C[Knowledge Base App
-    Presentation Layer]
-    subgraph knowledge-base-producer
-        C -->|Trigger| D[Add Producer]
+      ss1 --> ss2
     end
 
+    search_api -->|execute| search-usecase
+  end
 
-    D -->|Put data| E[(Queue - Kafka)]
-    E -->|Consume data| F[Add Consumer]
+  add_api --> |produce|kafka
+  search-usecase --> |actions in each step|neo4j
 
-    subgraph knowledge-base-consumer
-        F -->|Extract knowledge - leveraging LLM| G[New knowledge]
-        G -->|Search similar knowledge| database
-        database -->H[All related knowledges]
-        H -->|Distinguish actions: Add, Update, Delete, No-action leveraging LLM|I[Knowledge with actions]
-        I -->|Save to| database
+  subgraph add-consumer
+    consumer[consumer]
+
+    subgraph add-usecase
+      as1[extract vertices]
+      as2[extract edges]
+      as3[search existing edges]
+      as4[check and delete existing edges]
+      as5[check and add new edges]
+
+      as1 --> as2
+      as2 --> as3
+      as3 --> as4
+      as4 --> as5
     end
-```
-  
 
-__Search: Chat request__  
-Search action is triggered when user enter chat messages to ai assistant
-1. Data processing from backend app
-2. Presentation layer of knowledge base app
-3. Vector search on pgvector and retrieve top k knowledge
-  
-```mermaid
-flowchart TD
-    frontend[Frontend App]
-    backend[Backend App]
-    database[(Postgresql-pgvector)]
+    consumer --> |execute|add-usecase
+  end
 
-
-    frontend -->|User enters chat| backend
-
-    backend -->|Search on KB| C[Knowledge Base App]
-
-    C <-->|Vector search| database
-    
-    C -->|Search result|backend
+  consumer --> |consume|kafka
+  add-usecase --> |actions in each step|neo4j
 ```
