@@ -27,6 +27,7 @@ class DeleteOldEdgeService:
 
     async def execute(
         self,
+        system_id: str,
         new_edges: List[Edge],
         old_edges: List[Edge],
     ) -> List[Edge]:
@@ -43,7 +44,8 @@ class DeleteOldEdgeService:
                     "data": edge.source.data,
                     "data_type": edge.source.data_type,
                 },
-                "relationship": edge.data,
+                "relationship": edge.data_type,
+                "relationship_detail": edge.data,
                 "target": {
                     "data": edge.target.data,
                     "data_type": edge.target.data_type,
@@ -59,7 +61,8 @@ class DeleteOldEdgeService:
                     "data": edge.source.data,
                     "data_type": edge.source.data_type,
                 },
-                "relationship": edge.data,
+                "relationship": edge.data_type,
+                "relationship_detail": edge.data,
                 "target": {
                     "data": edge.target.data,
                     "data_type": edge.target.data_type,
@@ -72,7 +75,7 @@ class DeleteOldEdgeService:
             messages=[
                 {
                     "role": "system",
-                    "content": self.deletion_prompt,
+                    "content": self.deletion_prompt.replace("{{SYSTEM_ID}}", system_id),
                 },
                 {
                     "role": "user",

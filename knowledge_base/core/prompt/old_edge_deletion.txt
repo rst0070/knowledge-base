@@ -24,13 +24,15 @@ Delete an old edge if it meets any of these criteria:
     "id": 1,
     "source": {"data": "Marie Curie", "data_type": "person"},
     "target": {"data": "Radium", "data_type": "element"},
-    "relationship": "studied"
+    "relationship": "studied",
+    "relationship_detail": "conducted research on"
   },
   {
     "id": 2,
     "source": {"data": "DNA", "data_type": "molecule"},
     "target": {"data": "James Watson", "data_type": "person"},
-    "relationship": "researched by"
+    "relationship": "researched by",
+    "relationship_detail": "subject of investigation"
   }
 ]
 </old-edges>
@@ -40,12 +42,14 @@ Delete an old edge if it meets any of these criteria:
   {
     "source": {"data": "Marie Curie", "data_type": "person"},
     "target": {"data": "Radium", "data_type": "element"},
-    "relationship": "discovered"
+    "relationship": "discovered",
+    "relationship_detail": "first to isolate and identify"
   },
   {
     "source": {"data": "DNA", "data_type": "molecule"},
     "target": {"data": "James Watson", "data_type": "person"},
-    "relationship": "structure discovered by"
+    "relationship": "structure discovered by",
+    "relationship_detail": "co-discovered double helix structure"
   }
 ]
 </new-edges>
@@ -58,7 +62,7 @@ Delete an old edge if it meets any of these criteria:
 }
 ```
 
-**Reasoning**: "discovered" is more specific and accurate than "studied" for Marie Curie. "structure discovered by" is more precise than "researched by" for Watson's DNA work.
+**Reasoning**: "discovered" with detail "first to isolate and identify" is more specific and accurate than "studied" with "conducted research on". "structure discovered by" with "co-discovered double helix structure" is more precise than "researched by" with "subject of investigation".
 
 ### Example 2: Literature and Geography - Preserve Different Aspects
 **Input:**
@@ -69,13 +73,15 @@ Delete an old edge if it meets any of these criteria:
     "id": 3,
     "source": {"data": "Shakespeare", "data_type": "person"},
     "target": {"data": "England", "data_type": "country"},
-    "relationship": "lived in"
+    "relationship": "lived in",
+    "relationship_detail": "spent most of life"
   },
   {
     "id": 4,
     "source": {"data": "Amazon River", "data_type": "river"},
     "target": {"data": "Atlantic Ocean", "data_type": "water_body"},
-    "relationship": "flows into"
+    "relationship": "flows into",
+    "relationship_detail": "primary outlet"
   }
 ]
 </old-edges>
@@ -85,7 +91,8 @@ Delete an old edge if it meets any of these criteria:
   {
     "source": {"data": "Shakespeare", "data_type": "person"},
     "target": {"data": "Stratford-upon-Avon", "data_type": "city"},
-    "relationship": "born in"
+    "relationship": "born in",
+    "relationship_detail": "birthplace and early life"
   }
 ]
 </new-edges>
@@ -98,7 +105,7 @@ Delete an old edge if it meets any of these criteria:
 }
 ```
 
-**Reasoning**: Keep id 3 because "lived in England" and "born in Stratford-upon-Avon" represent different aspects of Shakespeare's geography. Keep id 4 as no new information about Amazon River is provided.
+**Reasoning**: Keep id 3 because "lived in England" with "spent most of life" and "born in Stratford-upon-Avon" with "birthplace and early life" represent different aspects of Shakespeare's geography. Keep id 4 as no new information about Amazon River is provided.
 
 ### Example 3: Sports and Medicine - Contradictory Information
 **Input:**
@@ -109,13 +116,15 @@ Delete an old edge if it meets any of these criteria:
     "id": 5,
     "source": {"data": "Olympics 2020", "data_type": "event"},
     "target": {"data": "Tokyo", "data_type": "city"},
-    "relationship": "held in 2020"
+    "relationship": "held in 2020",
+    "relationship_detail": "scheduled year"
   },
   {
     "id": 6,
     "source": {"data": "Penicillin", "data_type": "medicine"},
     "target": {"data": "1920", "data_type": "year"},
-    "relationship": "discovered in"
+    "relationship": "discovered in",
+    "relationship_detail": "initial discovery year"
   }
 ]
 </old-edges>
@@ -125,12 +134,14 @@ Delete an old edge if it meets any of these criteria:
   {
     "source": {"data": "Olympics 2020", "data_type": "event"},
     "target": {"data": "Tokyo", "data_type": "city"},
-    "relationship": "held in 2021"
+    "relationship": "held in 2021",
+    "relationship_detail": "actual year due to COVID-19"
   },
   {
     "source": {"data": "Penicillin", "data_type": "medicine"},
     "target": {"data": "1928", "data_type": "year"},
-    "relationship": "discovered in"
+    "relationship": "discovered in",
+    "relationship_detail": "corrected discovery year"
   }
 ]
 </new-edges>
@@ -154,13 +165,15 @@ Delete an old edge if it meets any of these criteria:
     "id": 7,
     "source": {"data": "Van Gogh", "data_type": "person"},
     "target": {"data": "Paintings", "data_type": "art_form"},
-    "relationship": "created"
+    "relationship": "created",
+    "relationship_detail": "produced artwork"
   },
   {
     "id": 8,
     "source": {"data": "Mount Everest", "data_type": "mountain"},
     "target": {"data": "Himalayas", "data_type": "mountain_range"},
-    "relationship": "located in"
+    "relationship": "located in",
+    "relationship_detail": "part of range"
   }
 ]
 </old-edges>
@@ -170,12 +183,14 @@ Delete an old edge if it meets any of these criteria:
   {
     "source": {"data": "Van Gogh", "data_type": "person"},
     "target": {"data": "Post-Impressionist paintings", "data_type": "art_form"},
-    "relationship": "created"
+    "relationship": "created",
+    "relationship_detail": "pioneered style"
   },
   {
     "source": {"data": "Mount Everest", "data_type": "mountain"},
     "target": {"data": "Nepal-Tibet border", "data_type": "location"},
-    "relationship": "located on"
+    "relationship": "located on",
+    "relationship_detail": "exact border location"
   }
 ]
 </new-edges>
@@ -188,7 +203,7 @@ Delete an old edge if it meets any of these criteria:
 }
 ```
 
-**Reasoning**: "Post-Impressionist paintings" is more specific than just "Paintings" for Van Gogh. "Nepal-Tibet border" is more precise than "Himalayas" for Mount Everest's location.
+**Reasoning**: "Post-Impressionist paintings" with "pioneered style" is more specific than just "Paintings" with "produced artwork". "Nepal-Tibet border" with "exact border location" is more precise than "Himalayas" with "part of range".
 
 ### Example 5: Technology and History - Updated vs Outdated Information
 **Input:**
@@ -199,13 +214,15 @@ Delete an old edge if it meets any of these criteria:
     "id": 9,
     "source": {"data": "World War II", "data_type": "event"},
     "target": {"data": "1945", "data_type": "year"},
-    "relationship": "ended in"
+    "relationship": "ended in",
+    "relationship_detail": "general year"
   },
   {
     "id": 10,
     "source": {"data": "Pluto", "data_type": "celestial_body"},
     "target": {"data": "Planet", "data_type": "classification"},
-    "relationship": "classified as"
+    "relationship": "classified as",
+    "relationship_detail": "original classification"
   }
 ]
 </old-edges>
@@ -215,12 +232,14 @@ Delete an old edge if it meets any of these criteria:
   {
     "source": {"data": "World War II", "data_type": "event"},
     "target": {"data": "September 2, 1945", "data_type": "date"},
-    "relationship": "ended on"
+    "relationship": "ended on",
+    "relationship_detail": "exact date of surrender"
   },
   {
     "source": {"data": "Pluto", "data_type": "celestial_body"},
     "target": {"data": "Dwarf Planet", "data_type": "classification"},
-    "relationship": "classified as"
+    "relationship": "classified as",
+    "relationship_detail": "current classification since 2006"
   }
 ]
 </new-edges>
@@ -233,7 +252,62 @@ Delete an old edge if it meets any of these criteria:
 }
 ```
 
-**Reasoning**: "September 2, 1945" is more specific than just "1945" for WWII end. Pluto was reclassified as a "Dwarf Planet" in 2006, so the old "Planet" classification is outdated.
+**Reasoning**: "September 2, 1945" with "exact date of surrender" is more specific than just "1945" with "general year". Pluto was reclassified as a "Dwarf Planet" in 2006, so the old "Planet" classification with "original classification" is outdated.
+
+### Example 6: User-AI Assistant Conversation - Professional Background
+**Input:**
+```xml
+<old-edges>
+[
+  {
+    "id": 11,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "software engineer", "data_type": "role"},
+    "relationship": "has_role",
+    "relationship_detail": "current position"
+  },
+  {
+    "id": 12,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "Google", "data_type": "organization"},
+    "relationship": "works_at",
+    "relationship_detail": "current employer"
+  }
+]
+</old-edges>
+
+<new-edges>
+[
+  {
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "senior software engineer", "data_type": "role"},
+    "relationship": "has_role",
+    "relationship_detail": "promoted to senior level"
+  },
+  {
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "machine learning", "data_type": "concept"},
+    "relationship": "specializes_in",
+    "relationship_detail": "primary area of expertise"
+  },
+  {
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "Google", "data_type": "organization"},
+    "relationship": "works_at",
+    "relationship_detail": "employed since 2020"
+  }
+]
+</new-edges>
+```
+
+**Output:**
+```json
+{
+  "ids": [11]
+}
+```
+
+**Reasoning**: Delete id 11 because "senior software engineer" with "promoted to senior level" is more specific and updated information than the generic "software engineer" with "current position". Keep id 12 as the temporal information "employed since 2020" is complementary rather than contradictory. The new edge about machine learning specialization is completely new information.
 
 ## Guidelines
 - Only delete edges when there's clear justification

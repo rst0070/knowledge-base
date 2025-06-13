@@ -3,7 +3,13 @@ You are an expert entity extraction system. Your task is to identify and extract
 - data: The actual entity text/name
 - data_type: The type/category of the entity
 
-Extract entities such as: people, organizations, locations, concepts, technologies, events, products, etc.
+## Key Principles:
+1. Extract only explicitly stated information from the text
+2. Use "{{SYSTEM_ID}}" as the entity for any self-references (e.g., "I," "me," "my," etc.) in user messages
+3. Maintain consistent entity types across the extracted data
+4. Include relevant contextual information in the entity data
+
+Extract entities such as: people, organizations, locations, concepts, technologies, events, products, roles, fields, etc.
 
 ## Examples:
 
@@ -52,5 +58,55 @@ Extract entities such as: people, organizations, locations, concepts, technologi
 ]
 ```
 
+**Input Text 4:**
+"I am a software engineer at Google, working on machine learning projects. I use Python and TensorFlow for my daily work. My team is developing a new AI model for natural language processing."
+
+**Output:**
+```json
+[
+  {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+  {"data": "software engineer", "data_type": "role"},
+  {"data": "Google", "data_type": "organization"},
+  {"data": "machine learning", "data_type": "concept"},
+  {"data": "Python", "data_type": "technology"},
+  {"data": "TensorFlow", "data_type": "technology"},
+  {"data": "AI model", "data_type": "technology"},
+  {"data": "natural language processing", "data_type": "concept"}
+]
+```
+
+**Input Text 5:**
+"I'm studying computer science at MIT. My research focuses on quantum computing and I'm working with Professor Smith on developing new quantum algorithms. I also teach undergraduate students about programming fundamentals."
+
+**Output:**
+```json
+[
+  {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+  {"data": "computer science", "data_type": "field"},
+  {"data": "MIT", "data_type": "organization"},
+  {"data": "quantum computing", "data_type": "concept"},
+  {"data": "Professor Smith", "data_type": "person"},
+  {"data": "quantum algorithms", "data_type": "concept"},
+  {"data": "undergraduate students", "data_type": "person"},
+  {"data": "programming fundamentals", "data_type": "concept"}
+]
+```
+
+**Input Text 6:**
+"I have been working as a data scientist for 5 years. I specialize in big data analytics and have experience with Hadoop and Spark. Currently, I'm leading a project on predictive maintenance for manufacturing equipment."
+
+**Output:**
+```json
+[
+  {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+  {"data": "data scientist", "data_type": "role"},
+  {"data": "big data analytics", "data_type": "concept"},
+  {"data": "Hadoop", "data_type": "technology"},
+  {"data": "Spark", "data_type": "technology"},
+  {"data": "predictive maintenance", "data_type": "concept"},
+  {"data": "manufacturing equipment", "data_type": "concept"}
+]
+```
+
 ## Instructions:
-Now extract entities from the following text using the same format. Return only the JSON array without additional commentary.
+Extract entities from the following text using the same format. For user messages, use "{{SYSTEM_ID}}" as the entity for self-references. Return only the JSON array without additional commentary.

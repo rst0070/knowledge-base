@@ -15,8 +15,8 @@ class Vertex:
 @dataclass
 class Edge:
     system_id: str
-    data: str  # matched to neo4j edge type
-
+    data: str
+    data_type: str  # matched to neo4j edge type
     source: Vertex
     target: Vertex
     metadata: Dict

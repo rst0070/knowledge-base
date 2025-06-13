@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 from knowledge_base.di.config import BaseConfig
 from knowledge_base.di.container import Container
 from knowledge_base.app.api.health.router import health_router
-from knowledge_base.app.api.experimental.router import router
+from knowledge_base.app.api.experimental.router import router as experimental_router
+from knowledge_base.app.api.search.router import router as search_router
 
 
 async def lifespan(app: FastAPI):
@@ -17,11 +18,13 @@ async def lifespan(app: FastAPI):
     container.wire(
         modules=[
             "knowledge_base.app.api.experimental.router",
+            "knowledge_base.app.api.search.router",
         ]
     )
 
     app.state.container = container
-    app.include_router(router)
+    app.include_router(experimental_router)
+    app.include_router(search_router)
     app.include_router(health_router)
 
     yield

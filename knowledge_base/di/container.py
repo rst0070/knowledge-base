@@ -13,6 +13,7 @@ from knowledge_base.core.service.deletion import DeleteOldEdgeService
 from knowledge_base.core.service.addition import AddNewEdgeService
 from knowledge_base.core.service.search import SearchEdgeService
 from knowledge_base.core.usecase.add import AddKnowledgeUsecase
+from knowledge_base.core.usecase.search import SearchKnowledgeUsecase
 
 
 class Container(containers.DeclarativeContainer):
@@ -95,4 +96,10 @@ class Container(containers.DeclarativeContainer):
         search_edge_service=search_edge_service,
         delete_old_edge_service=delete_old_edge_service,
         add_new_edge_service=add_new_edge_service,
+    )
+
+    search_usecase = providers.Factory(
+        SearchKnowledgeUsecase,
+        vertex_extraction_service=vertex_extraction_service,
+        search_edge_service=search_edge_service,
     )
