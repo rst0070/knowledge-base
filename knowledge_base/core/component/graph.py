@@ -32,8 +32,6 @@ class Neo4jGraphRepository(GraphRepository):
                 2 * vector.similarity.cosine(n.embedding, $embedding) - 1,
                 4
             ) AS similarity
-        WHERE
-            similarity >= $threshold
         CALL (n) {
             MATCH (n)-[r]->(m)
             RETURN
@@ -41,7 +39,8 @@ class Neo4jGraphRepository(GraphRepository):
                 labels(n) AS src_data_type,
                 n.embedding AS src_embedding,
 
-                type(r) AS edge_data,
+                type(r) AS edge_data_type,
+                r.data AS edge_data,
 
                 m.data AS dst_data,
                 labels(m) AS dst_data_type,
@@ -53,7 +52,8 @@ class Neo4jGraphRepository(GraphRepository):
                 labels(m) AS src_data_type,
                 m.embedding AS src_embedding,
 
-                type(r) AS edge_data,
+                type(r) AS edge_data_type,
+                r.data AS edge_data,
 
                 n.data AS dst_data,
                 labels(n) AS dst_data_type,
@@ -64,6 +64,7 @@ class Neo4jGraphRepository(GraphRepository):
             src_data_type,
             src_embedding,
             edge_data,
+            edge_data_type,
             dst_data,
             dst_data_type,
             dst_embedding,
@@ -73,6 +74,7 @@ class Neo4jGraphRepository(GraphRepository):
             src_data_type,
             src_embedding,
             edge_data,
+            edge_data_type,
             dst_data,
             dst_data_type,
             dst_embedding,
@@ -86,7 +88,6 @@ class Neo4jGraphRepository(GraphRepository):
         params = {
             "system_id": system_id,
             "embedding": embedding,
-            "threshold": 0.5,
             "limit": 100,
         }
 
@@ -110,6 +111,7 @@ class Neo4jGraphRepository(GraphRepository):
                         metadata={},
                     ),
                     data=record["edge_data"],
+                    data_type=record["edge_data_type"],
                     system_id=system_id,
                     metadata={},
                 )
@@ -150,7 +152,10 @@ class Neo4jGraphRepository(GraphRepository):
                     embedding: $target_embedding
                 }}
             )
-            MERGE (src)-[:{edge.data} {{system_id: $system_id}}]->(dst)
+            MERGE
+                (src)
+                -[:{edge.data_type} {{system_id: $system_id, data: $edge_data}}]
+                ->(dst)
             """
             params = {
                 "system_id": edge.source.system_id,
@@ -158,6 +163,7 @@ class Neo4jGraphRepository(GraphRepository):
                 "source_embedding": edge.source.embedding,
                 "target_data": edge.target.data,
                 "target_embedding": edge.target.embedding,
+                "edge_data": edge.data,
             }
             await self.driver.execute_query(cypher_query, **params)
 
@@ -174,7 +180,8 @@ class Neo4jGraphRepository(GraphRepository):
                 AND labels(src) = $source_type
 
                 AND r.system_id = $system_id
-                AND type(r) = $edge_data
+                AND r.data = $edge_data
+                AND type(r) = $edge_data_type
 
                 AND dst.system_id = $system_id
                 AND dst.data = $target_data
@@ -186,6 +193,7 @@ class Neo4jGraphRepository(GraphRepository):
                 "source_data": edge.source.data,
                 "source_type": edge.source.data_type,
                 "edge_data": edge.data,
+                "edge_data_type": edge.data_type,
                 "target_data": edge.target.data,
                 "target_type": edge.target.data_type,
             }

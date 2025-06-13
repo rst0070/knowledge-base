@@ -25,7 +25,9 @@ class AddNewEdgeService:
         ) as f:
             self.addition_prompt = f.read()
 
-    async def execute(self, old_edges: List[Edge], new_edges: List[Edge]):
+    async def execute(
+        self, system_id: str, old_edges: List[Edge], new_edges: List[Edge]
+    ):
         """
         Add the new edges to the graph.
         return: List[Edge]
@@ -41,6 +43,8 @@ class AddNewEdgeService:
                     "data": edge.target.data,
                     "data_type": edge.target.data_type,
                 },
+                "relationship": edge.data_type,
+                "relationship_detail": edge.data,
             }
             for i, edge in enumerate(old_edges)
         ]
@@ -56,6 +60,8 @@ class AddNewEdgeService:
                     "data": edge.target.data,
                     "data_type": edge.target.data_type,
                 },
+                "relationship": edge.data_type,
+                "relationship_detail": edge.data,
             }
             for i, edge in enumerate(new_edges)
         ]
@@ -64,7 +70,7 @@ class AddNewEdgeService:
             messages=[
                 {
                     "role": "system",
-                    "content": self.addition_prompt,
+                    "content": self.addition_prompt.replace("{{SYSTEM_ID}}", system_id),
                 },
                 {
                     "role": "user",

@@ -89,5 +89,76 @@ Focus on extracting entities that are central to answering the user's question, 
 ]
 ```
 
+**User Query 8:**
+"I'm a software engineer at Google working on machine learning projects. Can you help me understand the latest developments in transformer models?"
+
+**Output:**
+```json
+[
+  {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+  {"data": "software engineer", "data_type": "role"},
+  {"data": "Google", "data_type": "organization"},
+  {"data": "machine learning", "data_type": "concept"},
+  {"data": "transformer models", "data_type": "concept"}
+]
+```
+
+**User Query 9:**
+"As a PhD student in computer science at MIT, I'm researching quantum computing applications. What are the recent breakthroughs in quantum error correction?"
+
+**Output:**
+```json
+[
+  {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+  {"data": "PhD student", "data_type": "role"},
+  {"data": "computer science", "data_type": "field"},
+  {"data": "MIT", "data_type": "organization"},
+  {"data": "quantum computing", "data_type": "concept"},
+  {"data": "quantum error correction", "data_type": "concept"}
+]
+```
+
+**User Query 10:**
+"I've been working with Python and TensorFlow for 5 years. Can you explain the differences between PyTorch and TensorFlow for deep learning?"
+
+**Output:**
+```json
+[
+  {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+  {"data": "Python", "data_type": "technology"},
+  {"data": "TensorFlow", "data_type": "technology"},
+  {"data": "PyTorch", "data_type": "technology"},
+  {"data": "deep learning", "data_type": "concept"}
+]
+```
+
+**User Query 11:**
+"I'm a senior data scientist at Amazon focusing on recommendation systems. What are the best practices for implementing A/B testing in production?"
+
+**Output:**
+```json
+[
+  {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+  {"data": "senior data scientist", "data_type": "role"},
+  {"data": "Amazon", "data_type": "organization"},
+  {"data": "recommendation systems", "data_type": "concept"},
+  {"data": "A/B testing", "data_type": "concept"}
+]
+```
+
+**User Query 12:**
+"As a full-stack developer with expertise in React and Node.js, I'm interested in learning about microservices architecture. What are the key considerations for implementing it?"
+
+**Output:**
+```json
+[
+  {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+  {"data": "full-stack developer", "data_type": "role"},
+  {"data": "React", "data_type": "technology"},
+  {"data": "Node.js", "data_type": "technology"},
+  {"data": "microservices architecture", "data_type": "concept"}
+]
+```
+
 ## Instructions:
 Extract the key entities from the following user query that would be most relevant for searching a knowledge graph. Focus on the main subjects, objects, and concepts the user is asking about. Return only the JSON array without additional commentary.

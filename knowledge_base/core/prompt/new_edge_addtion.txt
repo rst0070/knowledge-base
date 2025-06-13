@@ -25,7 +25,8 @@ Add a new edge if it meets any of these criteria:
     "id": 1,
     "source": {"data": "Marie Curie", "data_type": "person"},
     "target": {"data": "Radium", "data_type": "element"},
-    "data": "studied"
+    "relationship": "studied",
+    "relationship_detail": "conducted research on"
   }
 ]
 </old-edges>
@@ -36,13 +37,15 @@ Add a new edge if it meets any of these criteria:
     "id": 101,
     "source": {"data": "Marie Curie", "data_type": "person"},
     "target": {"data": "Radium", "data_type": "element"},
-    "data": "discovered"
+    "relationship": "discovered",
+    "relationship_detail": "first to isolate and identify the element"
   },
   {
     "id": 102,
     "source": {"data": "Marie Curie", "data_type": "person"},
     "target": {"data": "Nobel Prize in Chemistry", "data_type": "award"},
-    "data": "won in 1911"
+    "relationship": "won",
+    "relationship_detail": "awarded in 1911 for discovery of radium"
   }
 ]
 </new-edges>
@@ -55,7 +58,7 @@ Add a new edge if it meets any of these criteria:
 }
 ```
 
-**Reasoning**: Add 101 because "discovered" is more specific than "studied". Add 102 because it's completely new award information.
+**Reasoning**: Add 101 because "discovered" is more specific than "studied" and includes detailed information about the discovery. Add 102 because it's completely new award information with specific details.
 
 ### Example 2: Literature - Don't Add Redundant Information
 **Input:**
@@ -66,13 +69,15 @@ Add a new edge if it meets any of these criteria:
     "id": 2,
     "source": {"data": "Harper Lee", "data_type": "person"},
     "target": {"data": "To Kill a Mockingbird", "data_type": "book"},
-    "data": "authored"
+    "relationship": "authored",
+    "relationship_detail": "wrote the novel"
   },
   {
     "id": 3,
     "source": {"data": "To Kill a Mockingbird", "data_type": "book"},
     "target": {"data": "1960", "data_type": "year"},
-    "data": "published in"
+    "relationship": "published_in",
+    "relationship_detail": "first publication date"
   }
 ]
 </old-edges>
@@ -83,13 +88,15 @@ Add a new edge if it meets any of these criteria:
     "id": 103,
     "source": {"data": "Harper Lee", "data_type": "person"},
     "target": {"data": "To Kill a Mockingbird", "data_type": "book"},
-    "data": "wrote"
+    "relationship": "wrote",
+    "relationship_detail": "created the literary work"
   },
   {
     "id": 104,
     "source": {"data": "To Kill a Mockingbird", "data_type": "book"},
     "target": {"data": "Pulitzer Prize", "data_type": "award"},
-    "data": "won"
+    "relationship": "won",
+    "relationship_detail": "awarded in 1961 for fiction"
   }
 ]
 </new-edges>
@@ -102,24 +109,26 @@ Add a new edge if it meets any of these criteria:
 }
 ```
 
-**Reasoning**: Don't add 103 because "wrote" is essentially the same as "authored". Add 104 because it's new valuable award information.
+**Reasoning**: Don't add 103 because "wrote" is essentially the same as "authored" with similar details. Add 104 because it's new valuable award information with specific details.
 
-### Example 3: Geography and Medicine - Different Aspects and Updated Information
+### Example 3: User-AI Assistant Conversation - Professional Background
 **Input:**
 ```xml
 <old-edges>
 [
   {
-    "id": 4,
-    "source": {"data": "Amazon River", "data_type": "river"},
-    "target": {"data": "South America", "data_type": "continent"},
-    "data": "flows through"
+    "id": 11,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "software engineer", "data_type": "role"},
+    "relationship": "has_role",
+    "relationship_detail": "current position"
   },
   {
-    "id": 5,
-    "source": {"data": "Penicillin", "data_type": "medicine"},
-    "target": {"data": "Bacteria", "data_type": "organism"},
-    "data": "fights"
+    "id": 12,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "Google", "data_type": "organization"},
+    "relationship": "works_at",
+    "relationship_detail": "current employer"
   }
 ]
 </old-edges>
@@ -127,22 +136,25 @@ Add a new edge if it meets any of these criteria:
 <new-edges>
 [
   {
-    "id": 105,
-    "source": {"data": "Amazon River", "data_type": "river"},
-    "target": {"data": "6,400 km", "data_type": "measurement"},
-    "data": "length is"
+    "id": 201,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "software engineer", "data_type": "role"},
+    "relationship": "has_role",
+    "relationship_detail": "senior software engineer with 5 years experience"
   },
   {
-    "id": 106,
-    "source": {"data": "Penicillin", "data_type": "medicine"},
-    "target": {"data": "Alexander Fleming", "data_type": "person"},
-    "data": "discovered by"
+    "id": 202,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "machine learning", "data_type": "concept"},
+    "relationship": "specializes_in",
+    "relationship_detail": "primary area of expertise"
   },
   {
-    "id": 107,
-    "source": {"data": "Amazon River", "data_type": "river"},
-    "target": {"data": "Brazil", "data_type": "country"},
-    "data": "located in"
+    "id": 203,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "Google", "data_type": "organization"},
+    "relationship": "works_at",
+    "relationship_detail": "employed since 2020"
   }
 ]
 </new-edges>
@@ -151,28 +163,30 @@ Add a new edge if it meets any of these criteria:
 **Output:**
 ```json
 {
-  "ids": [105, 106]
+  "ids": [201, 202]
 }
 ```
 
-**Reasoning**: Add 105 (new measurement information). Add 106 (new discovery relationship). Don't add 107 as it's less specific than existing "flows through South America".
+**Reasoning**: Add 201 because it provides more specific details about the role. Add 202 because it's completely new information about specialization. Don't add 203 as it's essentially the same as the existing relationship with just a temporal detail.
 
-### Example 4: Sports and Arts - Temporal and Role Information
+### Example 4: User-AI Assistant Conversation - Educational Background
 **Input:**
 ```xml
 <old-edges>
 [
   {
-    "id": 6,
-    "source": {"data": "Serena Williams", "data_type": "person"},
-    "target": {"data": "Tennis", "data_type": "sport"},
-    "data": "plays"
+    "id": 13,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "computer science", "data_type": "field"},
+    "relationship": "studies",
+    "relationship_detail": "major field of study"
   },
   {
-    "id": 7,
-    "source": {"data": "Vincent van Gogh", "data_type": "person"},
-    "target": {"data": "The Starry Night", "data_type": "painting"},
-    "data": "created"
+    "id": 14,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "MIT", "data_type": "organization"},
+    "relationship": "attends",
+    "relationship_detail": "current university"
   }
 ]
 </old-edges>
@@ -180,22 +194,25 @@ Add a new edge if it meets any of these criteria:
 <new-edges>
 [
   {
-    "id": 108,
-    "source": {"data": "Serena Williams", "data_type": "person"},
-    "target": {"data": "23 Grand Slam titles", "data_type": "achievement"},
-    "data": "holds record of"
+    "id": 204,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "computer science", "data_type": "field"},
+    "relationship": "studies",
+    "relationship_detail": "PhD candidate in computer science"
   },
   {
-    "id": 109,
-    "source": {"data": "Vincent van Gogh", "data_type": "person"},
-    "target": {"data": "1889", "data_type": "year"},
-    "data": "painted The Starry Night in"
+    "id": 205,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "quantum computing", "data_type": "concept"},
+    "relationship": "researches",
+    "relationship_detail": "primary research focus"
   },
   {
-    "id": 110,
-    "source": {"data": "Serena Williams", "data_type": "person"},
-    "target": {"data": "Professional Tennis", "data_type": "sport"},
-    "data": "competes in"
+    "id": 206,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "MIT", "data_type": "organization"},
+    "relationship": "attends",
+    "relationship_detail": "enrolled since 2021"
   }
 ]
 </new-edges>
@@ -204,28 +221,30 @@ Add a new edge if it meets any of these criteria:
 **Output:**
 ```json
 {
-  "ids": [108, 109]
+  "ids": [204, 205]
 }
 ```
 
-**Reasoning**: Add 108 (new achievement record). Add 109 (adds temporal context to existing creation). Don't add 110 as it's essentially the same as existing "plays Tennis".
+**Reasoning**: Add 204 because it provides more specific information about the level of study. Add 205 because it's new information about research focus. Don't add 206 as it's essentially the same as the existing relationship with just a temporal detail.
 
-### Example 5: Technology and Nature - Corrected Information
+### Example 5: User-AI Assistant Conversation - Skills and Projects
 **Input:**
 ```xml
 <old-edges>
 [
   {
-    "id": 8,
-    "source": {"data": "Mount Everest", "data_type": "mountain"},
-    "target": {"data": "8,840 meters", "data_type": "measurement"},
-    "data": "height is"
+    "id": 15,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "Python", "data_type": "technology"},
+    "relationship": "uses",
+    "relationship_detail": "programming language"
   },
   {
-    "id": 9,
-    "source": {"data": "DNA", "data_type": "molecule"},
-    "target": {"data": "Double helix", "data_type": "structure"},
-    "data": "has structure"
+    "id": 16,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "machine learning", "data_type": "concept"},
+    "relationship": "works_on",
+    "relationship_detail": "area of focus"
   }
 ]
 </old-edges>
@@ -233,16 +252,25 @@ Add a new edge if it meets any of these criteria:
 <new-edges>
 [
   {
-    "id": 111,
-    "source": {"data": "Mount Everest", "data_type": "mountain"},
-    "target": {"data": "8,848.86 meters", "data_type": "measurement"},
-    "data": "height is"
+    "id": 207,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "Python", "data_type": "technology"},
+    "relationship": "uses",
+    "relationship_detail": "primary language for ML development"
   },
   {
-    "id": 112,
-    "source": {"data": "DNA", "data_type": "molecule"},
-    "target": {"data": "Genetic information", "data_type": "concept"},
-    "data": "stores"
+    "id": 208,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "TensorFlow", "data_type": "technology"},
+    "relationship": "uses",
+    "relationship_detail": "deep learning framework"
+  },
+  {
+    "id": 209,
+    "source": {"data": "{{SYSTEM_ID}}", "data_type": "person"},
+    "target": {"data": "machine learning", "data_type": "concept"},
+    "relationship": "works_on",
+    "relationship_detail": "focuses on deep learning applications"
   }
 ]
 </new-edges>
@@ -251,11 +279,12 @@ Add a new edge if it meets any of these criteria:
 **Output:**
 ```json
 {
-  "ids": [111, 112]
+  "ids": [207, 208, 209]
 }
 ```
 
-**Reasoning**: Add 111 as it provides more precise/updated height measurement. Add 112 as it represents a different aspect of DNA (function vs structure).
+**Reasoning**: Add 207 because it provides more specific details about Python usage. Add 208 because it's new information about additional technology used. Add 209 because it provides more specific details about the type of machine learning work.
+
 
 ## Guidelines
 - Add edges that provide genuine new value to the knowledge graph

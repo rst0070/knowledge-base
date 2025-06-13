@@ -37,7 +37,9 @@ class VertexExtractionService:
             messages=[
                 {
                     "role": "system",
-                    "content": self.vertex_extraction_prompt,
+                    "content": self.vertex_extraction_prompt.replace(
+                        "{{SYSTEM_ID}}", system_id
+                    ),
                 },
                 {
                     "role": "user",
@@ -90,7 +92,9 @@ class VertexExtractionFromQueryService:
             messages=[
                 {
                     "role": "system",
-                    "content": self.vertex_extraction_from_query_prompt,
+                    "content": self.vertex_extraction_from_query_prompt.replace(
+                        "{{SYSTEM_ID}}", system_id
+                    ),
                 },
                 {
                     "role": "user",
@@ -147,7 +151,9 @@ class EdgeExtractionService:
             messages=[
                 {
                     "role": "system",
-                    "content": self.edge_extraction_prompt,
+                    "content": self.edge_extraction_prompt.replace(
+                        "{{SYSTEM_ID}}", system_id
+                    ),
                 },
                 {
                     "role": "user",
@@ -182,7 +188,8 @@ class EdgeExtractionService:
             edges.append(
                 Edge(
                     system_id=system_id,
-                    data=edge["relationship"].replace(" ", "_").replace("'", "_"),
+                    data_type=edge["relationship"].replace(" ", "_").replace("'", "_"),
+                    data=edge["relationship_detail"],
                     source=source,
                     target=target,
                     metadata=metadata or {},

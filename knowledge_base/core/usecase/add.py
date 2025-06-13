@@ -48,7 +48,9 @@ class AddKnowledgeUsecase:
         )
 
         existing_edges = await self.delete_old_edge_service.execute(
-            new_edges, old_edges
+            knowledge_src.system_id, new_edges, old_edges
         )
 
-        await self.add_new_edge_service.execute(existing_edges, new_edges)
+        await self.add_new_edge_service.execute(
+            knowledge_src.system_id, existing_edges, new_edges
+        )
