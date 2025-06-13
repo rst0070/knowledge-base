@@ -1,4 +1,3 @@
-from knowledge_base.core.port.embedder import Embedder
 from knowledge_base.core.port.llm import LLMPort
 from knowledge_base.core.entity.graph import Edge
 from typing import List
@@ -11,11 +10,9 @@ class DeleteOldEdgeService:
     def __init__(
         self,
         llm: LLMPort,
-        embedder: Embedder,
         graph_repository: GraphRepository,
     ):
         self.llm = llm
-        self.embedder = embedder
         self.graph_repository = graph_repository
 
         with open(
@@ -71,8 +68,6 @@ class DeleteOldEdgeService:
             for i, edge in enumerate(old_edges)
         ]
 
-        print("old_edges: ", _old_edges)
-
         response = await self.llm.generate_response(
             messages=[
                 {
@@ -93,7 +88,7 @@ class DeleteOldEdgeService:
             ],
             response_format={"type": "json_object"},
         )
-        print("deletion result: ", response)
+
         result = json.loads(response)
         deleted_ids = result["ids"]
 

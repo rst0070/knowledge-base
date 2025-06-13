@@ -46,7 +46,6 @@ class VertexExtractionService:
             ],
             response_format={"type": "json_object"},
         )
-        print(result)
         result = json.loads(result)
 
         vertices = []
@@ -120,10 +119,8 @@ class EdgeExtractionService:
     def __init__(
         self,
         llm: LLMPort,
-        embedder: Embedder,
     ):
         self.llm = llm
-        self.embedder = embedder
         self.edge_extraction_prompt = ""
         with open(
             os.path.realpath(
@@ -165,7 +162,7 @@ class EdgeExtractionService:
             ],
             response_format={"type": "json_object"},
         )
-        print("edge extraction result: ", result)
+
         result = json.loads(result)
         edges = []
         for edge in result:

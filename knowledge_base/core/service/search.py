@@ -14,7 +14,7 @@ class SearchEdgeService:
         self.llm = llm
         self.graph_repository = graph_repository
 
-    async def process_vertex(
+    async def _process_vertex(
         self,
         system_id: str,
         vertex: Vertex,
@@ -35,11 +35,10 @@ class SearchEdgeService:
         """
         search edges connecting the given vertices.
 
-        1. Embed the vertices
-        2. Search edges by the embeddings
-        3. Return the edges
+        1. Search edges by the embeddings of the vertices
+        2. Return the edges
         """
-        tasks = [self.process_vertex(system_id, vertex) for vertex in vertices]
+        tasks = [self._process_vertex(system_id, vertex) for vertex in vertices]
         result = await asyncio.gather(*tasks, return_exceptions=True)
 
         edges = []

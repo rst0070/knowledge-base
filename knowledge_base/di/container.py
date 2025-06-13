@@ -66,7 +66,6 @@ class Container(containers.DeclarativeContainer):
     edge_extraction_service = providers.Factory(
         EdgeExtractionService,
         llm=llm_port,
-        embedder=embedder,
     )
 
     search_edge_service = providers.Factory(
@@ -78,14 +77,12 @@ class Container(containers.DeclarativeContainer):
     delete_old_edge_service = providers.Factory(
         DeleteOldEdgeService,
         llm=llm_port,
-        embedder=embedder,
         graph_repository=graph_repository,
     )
 
     add_new_edge_service = providers.Factory(
         AddNewEdgeService,
         llm=llm_port,
-        embedder=embedder,
         graph_repository=graph_repository,
     )
 
