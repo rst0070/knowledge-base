@@ -6,6 +6,10 @@ from knowledge_base.core.service.extraction import (
 from knowledge_base.core.service.search import SearchEdgeService
 from knowledge_base.core.service.deletion import DeleteOldEdgeService
 from knowledge_base.core.service.addition import AddNewEdgeService
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class AddKnowledgeUsecase:
@@ -33,24 +37,57 @@ class AddKnowledgeUsecase:
         4. Delete old and not-useful edges
         5. Add new edges
         """
-        # await self.queue_consumer.consume()
+        logger.info(
+            {
+                "log_type": "add_usecase:execute",
+                "log_data": knowledge_src,
+            }
+        )
 
         vertices = await self.vertex_extraction_service.execute(
             knowledge_src.system_id, knowledge_src.data
+        )
+
+        logger.info(
+            {
+                "log_type": "add_usecase:execute:vertices_extracted",
+                "log_data": vertices,
+            }
         )
 
         new_edges = await self.edge_extraction_service.execute(
             knowledge_src.system_id, knowledge_src.data, vertices
         )
 
+        logger.info(
+            {
+                "log_type": "add_usecase:execute:new_edges_extracted",
+                "log_data": new_edges,
+            }
+        )
+
         old_edges = await self.search_edge_service.execute(
             knowledge_src.system_id, vertices
+        )
+
+        logger.info(
+            {
+                "log_type": "add_usecase:execute:old_edges_searched",
+                "log_data": old_edges,
+            }
         )
 
         existing_edges = await self.delete_old_edge_service.execute(
             knowledge_src.system_id, new_edges, old_edges
         )
 
-        await self.add_new_edge_service.execute(
+        logger.info(
+            {
+                "log_type": "add_usecase:execute:remaining_edges",
+                "log_data": existing_edges,
+            }
+        )
+
+        return await self.add_new_edge_service.execute(
             knowledge_src.system_id, existing_edges, new_edges
         )

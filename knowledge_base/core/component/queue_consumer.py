@@ -3,6 +3,9 @@ from knowledge_base.core.entity.knowledge import KnowledgeSource
 from aiokafka.structs import TopicPartition
 from aiokafka import AIOKafkaConsumer
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class KafkaQueueConsumer(QueueConsumer):
@@ -13,17 +16,38 @@ class KafkaQueueConsumer(QueueConsumer):
 
     async def consume(self) -> KnowledgeSource:
         if not self._ready:
-            print("Starting consumer")
+            logger.info(
+                {
+                    "log_type": "queue_consumer:consume:starting_consumer",
+                    "log_data": "Starting consumer",
+                }
+            )
             await self.kafka_consumer.start()
 
-            print("Seeking to beginning")
+            logger.info(
+                {
+                    "log_type": "queue_consumer:consume:seeking_to_beginning",
+                    "log_data": "Seeking to beginning",
+                }
+            )
             await self.kafka_consumer.seek_to_beginning(self.partition)
             self._ready = True
-            print("Ready")
+            logger.info(
+                {
+                    "log_type": "queue_consumer:consume:ready",
+                    "log_data": "Ready",
+                }
+            )
 
         record = await self.kafka_consumer.getone()
 
-        source = json.loads(record.value)
+        source = json.loads(record.value.decode("utf-8"))
+        logger.info(
+            {
+                "log_type": "queue_consumer:consume:source_received",
+                "log_data": source,
+            }
+        )
 
         return KnowledgeSource(
             system_id=source["system_id"],
