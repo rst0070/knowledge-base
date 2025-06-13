@@ -11,6 +11,11 @@ class BaseConfig(BaseSettings):
     # Litellm
     gemini_api_key: str
 
+    # Kafka
+    kafka_bootstrap_servers: list[str] = ["localhost:29092"]
+    kafka_topic: str = "knowledge_base"
+    kafka_partition: int = 0
+
     # LLM
     llm_model: str = "gemini-2.0-flash"
 

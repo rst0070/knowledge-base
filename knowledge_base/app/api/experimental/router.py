@@ -1,4 +1,4 @@
-from .dto import (
+from knowledge_base.app.api.add.dto import (
     AddRequest,
     AddResponse,
 )

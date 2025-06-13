@@ -12,7 +12,13 @@ class KafkaQueueProducer(QueueProducer):
         self.partition = partition
 
     async def produce(self, source: KnowledgeSource):
+        try:
+            await self.kafka_producer.start()
+        except Exception as e:
+            print(e)
+
         source_json = json.dumps(asdict(source))
+
         await self.kafka_producer.send_and_wait(
-            self.topic, source_json, partition=self.partition
+            self.topic, source_json.encode("utf-8"), partition=self.partition
         )
