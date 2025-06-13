@@ -19,7 +19,12 @@ class AddNewEdgeService:
         self.graph_repository = graph_repository
 
         with open(
-            os.path.join(os.path.dirname(__file__), "addition_prompt.txt"), "r"
+            os.path.realpath(
+                os.path.join(
+                    os.path.dirname(__file__), "../prompt", "new_edge_addtion.txt"
+                )
+            ),
+            "r",
         ) as f:
             self.addition_prompt = f.read()
 
@@ -75,7 +80,8 @@ class AddNewEdgeService:
                     </new-edges>
                     """,
                 },
-            ]
+            ],
+            response_format={"type": "json_object"},
         )
         result = json.loads(response)
         added_ids = result["ids"]

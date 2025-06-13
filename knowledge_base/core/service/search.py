@@ -1,4 +1,3 @@
-from knowledge_base.core.port.embedder import Embedder
 from knowledge_base.core.port.llm import LLMPort
 from knowledge_base.core.port.graph import GraphRepository
 from knowledge_base.core.entity.graph import Vertex, Edge
@@ -10,11 +9,9 @@ class SearchEdgeService:
     def __init__(
         self,
         llm: LLMPort,
-        embedder: Embedder,
         graph_repository: GraphRepository,
     ):
         self.llm = llm
-        self.embedder = embedder
         self.graph_repository = graph_repository
 
     async def process_vertex(
@@ -25,9 +22,8 @@ class SearchEdgeService:
         """
         Process a single vertex.
         """
-        embedding = await self.embedder.embed(vertex.data)
         result = await self.graph_repository.find_edges_by_embedding(
-            system_id, embedding
+            system_id, vertex.embedding
         )
         return result
 

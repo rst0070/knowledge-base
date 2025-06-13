@@ -19,7 +19,12 @@ class DeleteOldEdgeService:
         self.graph_repository = graph_repository
 
         with open(
-            os.path.join(os.path.dirname(__file__), "deletion_prompt.txt"), "r"
+            os.path.realpath(
+                os.path.join(
+                    os.path.dirname(__file__), "../prompt", "old_edge_deletion.txt"
+                )
+            ),
+            "r",
         ) as f:
             self.deletion_prompt = f.read()
 
@@ -41,6 +46,7 @@ class DeleteOldEdgeService:
                     "data": edge.source.data,
                     "data_type": edge.source.data_type,
                 },
+                "relationship": edge.data,
                 "target": {
                     "data": edge.target.data,
                     "data_type": edge.target.data_type,
@@ -56,6 +62,7 @@ class DeleteOldEdgeService:
                     "data": edge.source.data,
                     "data_type": edge.source.data_type,
                 },
+                "relationship": edge.data,
                 "target": {
                     "data": edge.target.data,
                     "data_type": edge.target.data_type,
@@ -63,6 +70,8 @@ class DeleteOldEdgeService:
             }
             for i, edge in enumerate(old_edges)
         ]
+
+        print("old_edges: ", _old_edges)
 
         response = await self.llm.generate_response(
             messages=[
@@ -74,16 +83,17 @@ class DeleteOldEdgeService:
                     "role": "user",
                     "content": f"""
                     <old-edges>
-                    {json.dumps(_old_edges)}
+                    {json.dumps(_old_edges, ensure_ascii=False)}
                     </old_edges>
                     <new_edges>
-                    {json.dumps(_new_edges)}
+                    {json.dumps(_new_edges, ensure_ascii=False)}
                     </new_edges>
                     """,
                 },
-            ]
+            ],
+            response_format={"type": "json_object"},
         )
-
+        print("deletion result: ", response)
         result = json.loads(response)
         deleted_ids = result["ids"]
 

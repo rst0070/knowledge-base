@@ -24,13 +24,13 @@ Delete an old edge if it meets any of these criteria:
     "id": 1,
     "source": {"data": "Marie Curie", "data_type": "person"},
     "target": {"data": "Radium", "data_type": "element"},
-    "data": "studied"
+    "relationship": "studied"
   },
   {
     "id": 2,
     "source": {"data": "DNA", "data_type": "molecule"},
     "target": {"data": "James Watson", "data_type": "person"},
-    "data": "researched by"
+    "relationship": "researched by"
   }
 ]
 </old-edges>
@@ -40,12 +40,12 @@ Delete an old edge if it meets any of these criteria:
   {
     "source": {"data": "Marie Curie", "data_type": "person"},
     "target": {"data": "Radium", "data_type": "element"},
-    "data": "discovered"
+    "relationship": "discovered"
   },
   {
     "source": {"data": "DNA", "data_type": "molecule"},
     "target": {"data": "James Watson", "data_type": "person"},
-    "data": "structure discovered by"
+    "relationship": "structure discovered by"
   }
 ]
 </new-edges>
@@ -69,13 +69,13 @@ Delete an old edge if it meets any of these criteria:
     "id": 3,
     "source": {"data": "Shakespeare", "data_type": "person"},
     "target": {"data": "England", "data_type": "country"},
-    "data": "lived in"
+    "relationship": "lived in"
   },
   {
     "id": 4,
     "source": {"data": "Amazon River", "data_type": "river"},
     "target": {"data": "Atlantic Ocean", "data_type": "water_body"},
-    "data": "flows into"
+    "relationship": "flows into"
   }
 ]
 </old-edges>
@@ -85,7 +85,7 @@ Delete an old edge if it meets any of these criteria:
   {
     "source": {"data": "Shakespeare", "data_type": "person"},
     "target": {"data": "Stratford-upon-Avon", "data_type": "city"},
-    "data": "born in"
+    "relationship": "born in"
   }
 ]
 </new-edges>
@@ -109,13 +109,13 @@ Delete an old edge if it meets any of these criteria:
     "id": 5,
     "source": {"data": "Olympics 2020", "data_type": "event"},
     "target": {"data": "Tokyo", "data_type": "city"},
-    "data": "held in 2020"
+    "relationship": "held in 2020"
   },
   {
     "id": 6,
     "source": {"data": "Penicillin", "data_type": "medicine"},
     "target": {"data": "1920", "data_type": "year"},
-    "data": "discovered in"
+    "relationship": "discovered in"
   }
 ]
 </old-edges>
@@ -125,12 +125,12 @@ Delete an old edge if it meets any of these criteria:
   {
     "source": {"data": "Olympics 2020", "data_type": "event"},
     "target": {"data": "Tokyo", "data_type": "city"},
-    "data": "held in 2021"
+    "relationship": "held in 2021"
   },
   {
     "source": {"data": "Penicillin", "data_type": "medicine"},
     "target": {"data": "1928", "data_type": "year"},
-    "data": "discovered in"
+    "relationship": "discovered in"
   }
 ]
 </new-edges>
@@ -154,13 +154,13 @@ Delete an old edge if it meets any of these criteria:
     "id": 7,
     "source": {"data": "Van Gogh", "data_type": "person"},
     "target": {"data": "Paintings", "data_type": "art_form"},
-    "data": "created"
+    "relationship": "created"
   },
   {
     "id": 8,
     "source": {"data": "Mount Everest", "data_type": "mountain"},
     "target": {"data": "Himalayas", "data_type": "mountain_range"},
-    "data": "located in"
+    "relationship": "located in"
   }
 ]
 </old-edges>
@@ -170,12 +170,12 @@ Delete an old edge if it meets any of these criteria:
   {
     "source": {"data": "Van Gogh", "data_type": "person"},
     "target": {"data": "Post-Impressionist paintings", "data_type": "art_form"},
-    "data": "created"
+    "relationship": "created"
   },
   {
     "source": {"data": "Mount Everest", "data_type": "mountain"},
     "target": {"data": "Nepal-Tibet border", "data_type": "location"},
-    "data": "located on"
+    "relationship": "located on"
   }
 ]
 </new-edges>
@@ -199,13 +199,13 @@ Delete an old edge if it meets any of these criteria:
     "id": 9,
     "source": {"data": "World War II", "data_type": "event"},
     "target": {"data": "1945", "data_type": "year"},
-    "data": "ended in"
+    "relationship": "ended in"
   },
   {
     "id": 10,
     "source": {"data": "Pluto", "data_type": "celestial_body"},
     "target": {"data": "Planet", "data_type": "classification"},
-    "data": "classified as"
+    "relationship": "classified as"
   }
 ]
 </old-edges>
@@ -215,12 +215,12 @@ Delete an old edge if it meets any of these criteria:
   {
     "source": {"data": "World War II", "data_type": "event"},
     "target": {"data": "September 2, 1945", "data_type": "date"},
-    "data": "ended on"
+    "relationship": "ended on"
   },
   {
     "source": {"data": "Pluto", "data_type": "celestial_body"},
     "target": {"data": "Dwarf Planet", "data_type": "classification"},
-    "data": "classified as"
+    "relationship": "classified as"
   }
 ]
 </new-edges>
