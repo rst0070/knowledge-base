@@ -2,9 +2,12 @@ from dependency_injector import containers, providers
 from knowledge_base.infra.neo4j import get_neo4j_driver
 from knowledge_base.infra.litellm import get_litellm_router
 from knowledge_base.infra.fastembed import get_fastembed_embedding_model
+from knowledge_base.infra.kafka import get_kafka_producer, get_kafka_consumer
 from knowledge_base.core.component.graph import Neo4jGraphRepository
 from knowledge_base.core.component.llm import LiteLLM
 from knowledge_base.core.component.embedder import FastEmbed
+from knowledge_base.core.component.queue_producer import KafkaQueueProducer
+from knowledge_base.core.component.queue_consumer import KafkaQueueConsumer
 from knowledge_base.core.service.extraction import (
     VertexExtractionService,
     EdgeExtractionService,
@@ -38,6 +41,18 @@ class Container(containers.DeclarativeContainer):
         embedding_model=config.embedding_model,
     )
 
+    kafka_producer = providers.Resource(
+        get_kafka_producer,
+        bootstrap_servers=config.kafka_bootstrap_servers,
+    )
+
+    kafka_consumer = providers.Resource(
+        get_kafka_consumer,
+        bootstrap_servers=config.kafka_bootstrap_servers,
+        topic=config.kafka_topic,
+        partition=config.kafka_partition,
+    )
+
     # Components
 
     graph_repository = providers.Singleton(
@@ -54,6 +69,20 @@ class Container(containers.DeclarativeContainer):
     embedder = providers.Singleton(
         FastEmbed,
         embedding_model=fastembed_embedding_model,
+    )
+
+    queue_producer = providers.Singleton(
+        KafkaQueueProducer,
+        kafka_producer=kafka_producer,
+        topic=config.kafka_topic,
+        partition=config.kafka_partition,
+    )
+
+    queue_consumer = providers.Singleton(
+        KafkaQueueConsumer,
+        kafka_consumer=kafka_consumer,
+        topic=config.kafka_topic,
+        partition=config.kafka_partition,
     )
 
     # Services
