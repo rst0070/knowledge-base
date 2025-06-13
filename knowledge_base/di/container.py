@@ -34,6 +34,8 @@ class Container(containers.DeclarativeContainer):
     litellm_router = providers.Resource(
         get_litellm_router,
         gemini_api_key=config.gemini_api_key,
+        redis_host=config.redis_host,
+        redis_port=config.redis_port,
     )
 
     fastembed_embedding_model = providers.Resource(
