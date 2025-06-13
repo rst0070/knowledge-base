@@ -35,9 +35,18 @@ def _get_model_list(gemini_api_key: Optional[str] = None) -> list[dict]:
     return model_list
 
 
-def get_litellm_router(gemini_api_key: Optional[str] = None) -> Router:
+def get_litellm_router(
+    gemini_api_key: Optional[str] = None,
+    redis_host: Optional[str] = None,
+    redis_port: Optional[int] = None,
+) -> Router:
     model_list = _get_model_list(
         gemini_api_key=gemini_api_key,
     )
     litellm.suppress_debug_info = True
-    return Router(model_list=model_list, debug_level="DEBUG")
+    return Router(
+        model_list=model_list,
+        debug_level="DEBUG",
+        redis_host=redis_host,
+        redis_port=redis_port,
+    )

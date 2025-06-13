@@ -10,6 +10,8 @@ class BaseConfig(BaseSettings):
 
     # Litellm
     gemini_api_key: str
+    redis_host: str = "localhost"
+    redis_port: int = 6379
 
     # Kafka
     kafka_bootstrap_servers: list[str] = ["localhost:29092"]

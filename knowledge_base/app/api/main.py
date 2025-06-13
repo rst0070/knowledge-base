@@ -6,8 +6,7 @@ from knowledge_base.di.config import BaseConfig
 from knowledge_base.di.container import Container
 from knowledge_base.app.api.health.router import health_router
 from knowledge_base.app.api.experimental.router import router as experimental_router
-from knowledge_base.app.api.search.router import router as search_router
-from knowledge_base.app.api.add.router import router as add_router
+from knowledge_base.app.api.knowledge.router import router as knowledge_router
 from knowledge_base.infra.logging import init_logging, shutdown_logging
 
 
@@ -21,16 +20,14 @@ async def lifespan(app: FastAPI):
     container.wire(
         modules=[
             "knowledge_base.app.api.experimental.router",
-            "knowledge_base.app.api.search.router",
-            "knowledge_base.app.api.add.router",
+            "knowledge_base.app.api.knowledge.router",
         ]
     )
 
     app.state.container = container
     app.include_router(experimental_router)
-    app.include_router(search_router)
     app.include_router(health_router)
-    app.include_router(add_router)
+    app.include_router(knowledge_router)
 
     yield
 

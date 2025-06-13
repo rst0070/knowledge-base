@@ -56,16 +56,13 @@ services:
       KAFKA_CLUSTERS_0_NAME: 'local'
     networks:
       - kb-network
-    # volumes:
-    #   - ./config.yml:/etc/kafkaui/dynamic_config.yaml
 
-  # kb-api:
-  #   container_name: kb-api
-  #   image: kb-api:latest
-  #   ports:
-  #     - 3000:3000
-  #   networks:
-  #     - kb-network
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    networks:
+      - kb-network
 
 networks:
   kb-network:

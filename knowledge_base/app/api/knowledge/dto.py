@@ -16,3 +16,7 @@ class AddRequest(BaseModel):
 
 class AddResponse(BaseModel):
     message: str = Field(..., description="Message")
+
+
+class SearchResponse(BaseModel):
+    data: List[str]
