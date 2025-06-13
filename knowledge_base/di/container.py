@@ -50,7 +50,6 @@ class Container(containers.DeclarativeContainer):
         get_kafka_consumer,
         bootstrap_servers=config.kafka_bootstrap_servers,
         topic=config.kafka_topic,
-        partition=config.kafka_partition,
     )
 
     # Components

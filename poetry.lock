@@ -1045,6 +1045,17 @@ files = [
 ]
 
 [[package]]
+name = "jsonformatter"
+version = "0.3.4"
+description = "Python log in json format."
+optional = false
+python-versions = ">=2.7"
+groups = ["main"]
+files = [
+    {file = "jsonformatter-0.3.4.tar.gz", hash = "sha256:af71ae1534a80d6f60f8d5ee7bfa70c2e45389ed803ed94239f4305b7c68105d"},
+]
+
+[[package]]
 name = "jsonschema"
 version = "4.23.0"
 description = "An implementation of JSON Schema validation for Python"
@@ -3095,4 +3106,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11"
-content-hash = "a99c3388c6eeb25cb249acc1ad71635e1111d27da57cd78a9fe36f012095a2df"
+content-hash = "1684f4c4308d83e8ef5d93bacf7a184ec6358720c7acb812776897e78a9466b8"

@@ -17,7 +17,7 @@ class KafkaQueueProducer(QueueProducer):
         except Exception as e:
             print(e)
 
-        source_json = json.dumps(asdict(source))
+        source_json = json.dumps(asdict(source), ensure_ascii=False)
 
         await self.kafka_producer.send_and_wait(
             self.topic, source_json.encode("utf-8"), partition=self.partition

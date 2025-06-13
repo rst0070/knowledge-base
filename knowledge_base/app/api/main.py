@@ -8,9 +8,11 @@ from knowledge_base.app.api.health.router import health_router
 from knowledge_base.app.api.experimental.router import router as experimental_router
 from knowledge_base.app.api.search.router import router as search_router
 from knowledge_base.app.api.add.router import router as add_router
+from knowledge_base.infra.logging import init_logging, shutdown_logging
 
 
 async def lifespan(app: FastAPI):
+    init_logging()
     load_dotenv()
     config = BaseConfig()
     container = Container()
@@ -33,6 +35,7 @@ async def lifespan(app: FastAPI):
     yield
 
     await container.shutdown_resources()
+    shutdown_logging()
 
 
 def get_application():
