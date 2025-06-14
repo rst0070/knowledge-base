@@ -45,12 +45,12 @@ class Container(containers.DeclarativeContainer):
 
     kafka_producer = providers.Resource(
         get_kafka_producer,
-        bootstrap_servers=config.kafka_bootstrap_servers,
+        bootstrap_server=config.kafka_bootstrap_server,
     )
 
     kafka_consumer = providers.Resource(
         get_kafka_consumer,
-        bootstrap_servers=config.kafka_bootstrap_servers,
+        bootstrap_server=config.kafka_bootstrap_server,
         topic=config.kafka_topic,
     )
 

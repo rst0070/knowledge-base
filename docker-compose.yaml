@@ -1,6 +1,7 @@
 services:
 
   neo4j:
+    container_name: kb-neo4j
     image: neo4j:5.26.8-community
     # volumes:
     #     - /$HOME/neo4j/logs:/logs
@@ -8,7 +9,9 @@ services:
     #     - /$HOME/neo4j/data:/data
     #     - /$HOME/neo4j/plugins:/plugins
     environment:
-        - NEO4J_AUTH=neo4j/thisispasswd
+      - NEO4J_AUTH=neo4j/thisispasswd
+    networks:
+      - kb-network
     ports:
       - "7474:7474"
       - "7687:7687"
@@ -49,7 +52,7 @@ services:
     container_name: kb-kafka-ui
     image: provectuslabs/kafka-ui:latest
     ports:
-      - 8080:8080
+      - 9090:8080
     environment:
       DYNAMIC_CONFIG_ENABLED: 'true'
       KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: 'kafka:9092'
@@ -58,11 +61,46 @@ services:
       - kb-network
 
   redis:
+    container_name: kb-redis
     image: redis:latest
     ports:
       - 6379:6379
     networks:
       - kb-network
+
+  kb-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kb-api
+    image: kb-api:latest
+    ports:
+      - 3000:3000
+    networks:
+      - kb-network
+    depends_on:
+      - kafka
+      - redis
+    volumes:
+      - .:/app
+    command: |
+      poetry run uvicorn knowledge_base.app.api.main:app --port 3000 --host 0.0.0.0 --env-file .env
+
+  kb-consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kb-consumer
+    image: kb-consumer:latest
+    networks:
+      - kb-network
+    depends_on:
+      - kafka
+      - redis
+    volumes:
+      - .:/app
+    command: |
+      poetry run python -m knowledge_base.app.add_consumer.main --env-file .env
 
 networks:
   kb-network:

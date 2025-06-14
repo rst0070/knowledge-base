@@ -14,7 +14,7 @@ class BaseConfig(BaseSettings):
     redis_port: int = 6379
 
     # Kafka
-    kafka_bootstrap_servers: list[str] = ["localhost:29092"]
+    kafka_bootstrap_server: str = "localhost:29092"
     kafka_topic: str = "knowledge_base"
     kafka_partition: int = 0
 
