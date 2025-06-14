@@ -1,6 +1,6 @@
 # Knowledge Base
 This project is a graph-db based knowledge-base system.
-This code extract and update knowledge leveraging llm with producer-consumer architecture.
+This code extracts and updates knowledge leveraging llm with producer-consumer architecture.
 
 ## project structure
 - app
