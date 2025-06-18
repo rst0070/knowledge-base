@@ -1,6 +1,7 @@
 from knowledge_base.core.port.llm import LLMPort
 from knowledge_base.core.entity.graph import Edge
 from knowledge_base.core.port.graph import GraphRepository
+from jinja2 import Template
 from typing import List
 import os
 import json
@@ -18,12 +19,12 @@ class AddNewEdgeService:
         with open(
             os.path.realpath(
                 os.path.join(
-                    os.path.dirname(__file__), "../prompt", "new_edge_addtion.txt"
+                    os.path.dirname(__file__), "../prompt", "new_edge_addtion.jinja2"
                 )
             ),
             "r",
         ) as f:
-            self.addition_prompt = f.read()
+            self.addition_prompt = Template(f.read())
 
     async def execute(
         self, system_id: str, old_edges: List[Edge], new_edges: List[Edge]
@@ -70,7 +71,9 @@ class AddNewEdgeService:
             messages=[
                 {
                     "role": "system",
-                    "content": self.addition_prompt.replace("{{SYSTEM_ID}}", system_id),
+                    "content": self.addition_prompt.render(
+                        SYSTEM_ID=system_id,
+                    ),
                 },
                 {
                     "role": "user",
