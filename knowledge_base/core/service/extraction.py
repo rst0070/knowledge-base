@@ -3,6 +3,7 @@ from knowledge_base.core.port.embedder import Embedder
 from knowledge_base.core.entity.graph import Vertex, Edge
 from typing import List, Optional, Dict
 from dataclasses import asdict
+from jinja2 import Template
 import json
 import os
 
@@ -20,12 +21,12 @@ class VertexExtractionService:
         with open(
             os.path.realpath(
                 os.path.join(
-                    os.path.dirname(__file__), "../prompt", "vertex_extraction.txt"
+                    os.path.dirname(__file__), "../prompt", "vertex_extraction.jinja2"
                 )
             ),
             "r",
         ) as f:
-            self.vertex_extraction_prompt = f.read()
+            self.vertex_extraction_prompt = Template(f.read())
 
     async def execute(
         self, system_id: str, text: str, metadata: Optional[Dict] = None
@@ -37,8 +38,8 @@ class VertexExtractionService:
             messages=[
                 {
                     "role": "system",
-                    "content": self.vertex_extraction_prompt.replace(
-                        "{{SYSTEM_ID}}", system_id
+                    "content": self.vertex_extraction_prompt.render(
+                        SYSTEM_ID=system_id
                     ),
                 },
                 {
@@ -75,12 +76,12 @@ class VertexExtractionFromQueryService:
                 os.path.join(
                     os.path.dirname(__file__),
                     "../prompt",
-                    "vertex_extraction_from_query.txt",
+                    "vertex_extraction_from_query.jinja2",
                 )
             ),
             "r",
         ) as f:
-            self.vertex_extraction_from_query_prompt = f.read()
+            self.vertex_extraction_from_query_prompt = Template(f.read())
 
     async def execute(
         self, system_id: str, query: str, metadata: Optional[Dict] = None
@@ -92,8 +93,8 @@ class VertexExtractionFromQueryService:
             messages=[
                 {
                     "role": "system",
-                    "content": self.vertex_extraction_from_query_prompt.replace(
-                        "{{SYSTEM_ID}}", system_id
+                    "content": self.vertex_extraction_from_query_prompt.render(
+                        SYSTEM_ID=system_id
                     ),
                 },
                 {
@@ -129,12 +130,12 @@ class EdgeExtractionService:
         with open(
             os.path.realpath(
                 os.path.join(
-                    os.path.dirname(__file__), "../prompt", "edge_extraction.txt"
+                    os.path.dirname(__file__), "../prompt", "edge_extraction.jinja2"
                 )
             ),
             "r",
         ) as f:
-            self.edge_extraction_prompt = f.read()
+            self.edge_extraction_prompt = Template(f.read())
 
     async def execute(
         self,
@@ -151,9 +152,7 @@ class EdgeExtractionService:
             messages=[
                 {
                     "role": "system",
-                    "content": self.edge_extraction_prompt.replace(
-                        "{{SYSTEM_ID}}", system_id
-                    ),
+                    "content": self.edge_extraction_prompt.render(SYSTEM_ID=system_id),
                 },
                 {
                     "role": "user",

@@ -1,9 +1,10 @@
+from knowledge_base.core.port.graph import GraphRepository
 from knowledge_base.core.port.llm import LLMPort
 from knowledge_base.core.entity.graph import Edge
+from jinja2 import Template
 from typing import List
 import json
 import os
-from knowledge_base.core.port.graph import GraphRepository
 
 
 class DeleteOldEdgeService:
@@ -18,12 +19,12 @@ class DeleteOldEdgeService:
         with open(
             os.path.realpath(
                 os.path.join(
-                    os.path.dirname(__file__), "../prompt", "old_edge_deletion.txt"
+                    os.path.dirname(__file__), "../prompt", "old_edge_deletion.jinja2"
                 )
             ),
             "r",
         ) as f:
-            self.deletion_prompt = f.read()
+            self.deletion_prompt = Template(f.read())
 
     async def execute(
         self,
@@ -75,7 +76,7 @@ class DeleteOldEdgeService:
             messages=[
                 {
                     "role": "system",
-                    "content": self.deletion_prompt.replace("{{SYSTEM_ID}}", system_id),
+                    "content": self.deletion_prompt.render(SYSTEM_ID=system_id),
                 },
                 {
                     "role": "user",
