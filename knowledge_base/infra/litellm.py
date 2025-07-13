@@ -3,7 +3,10 @@ from litellm.router import Router
 import litellm
 
 
-def _get_model_list(gemini_api_key: Optional[str] = None) -> list[dict]:
+def _get_model_list(
+    gemini_api_key: Optional[str] = None,
+    vllm_api_base: Optional[str] = None,
+) -> list[dict]:
     extra_headers = {}
     model_list = []
 
@@ -11,6 +14,15 @@ def _get_model_list(gemini_api_key: Optional[str] = None) -> list[dict]:
         # For using google ai studio, only need to set gemini_api_key
         model_list.extend(
             [
+                {
+                    "model_name": "gemini-2.0-flash-lite",
+                    "litellm_params": {
+                        "model": "gemini/gemini-2.0-flash-lite-preview-02-05",
+                        "api_key": gemini_api_key,
+                        "timeout": 300,
+                        "extra_headers": extra_headers,
+                    },
+                },
                 {
                     "model_name": "gemini-2.0-flash",
                     "litellm_params": {
@@ -32,16 +44,31 @@ def _get_model_list(gemini_api_key: Optional[str] = None) -> list[dict]:
             ]
         )
 
+    if vllm_api_base:
+        model_list.extend(
+            [
+                {
+                    "model_name": "gemma-3-4b-it",
+                    "litellm_params": {
+                        "model": "hosted_vllm/google/gemma-3-4b-it",
+                        "api_base": vllm_api_base,
+                    }
+                },
+            ]
+        )
+
     return model_list
 
 
 def get_litellm_router(
     gemini_api_key: Optional[str] = None,
+    vllm_api_base: Optional[str] = None,
     redis_host: Optional[str] = None,
     redis_port: Optional[int] = None,
 ) -> Router:
     model_list = _get_model_list(
         gemini_api_key=gemini_api_key,
+        vllm_api_base=vllm_api_base,
     )
     litellm.suppress_debug_info = True
     return Router(

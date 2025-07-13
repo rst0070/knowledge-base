@@ -6,18 +6,16 @@ authors = [
     {name = "Wonbin Kim",email = "kwb0711@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<4.0"
 dependencies = [
     "litellm (>=1.68.0,<2.0.0)",
     "pydantic-settings (>=2.9.1,<3.0.0)",
     "dependency-injector (>=4.46.0,<5.0.0)",
     "python-dotenv (>=1.1.0,<2.0.0)",
-    "psycopg2-binary (>=2.9.10,<3.0.0)",
     "fastapi (>=0.115.12,<0.116.0)",
     "aiokafka (>=0.12.0,<0.13.0)",
     "uvicorn (>=0.34.2,<0.35.0)",
-    "mcp (>=1.9.1,<2.0.0)",
-    "fastapi-mcp (>=0.3.4,<0.4.0)",
+    "mcp[cli] (>=1.11.0,<2.0.0)",
     "fastembed (>=0.7.0,<0.8.0)",
     "neo4j (>=5.28.1,<6.0.0)",
     "jsonformatter (>=0.3.4,<0.4.0)",
@@ -29,3 +27,7 @@ dependencies = [
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.5"
+

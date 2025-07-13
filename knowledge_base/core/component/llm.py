@@ -58,8 +58,8 @@ class LiteLLM(LLMPort):
         tool_choice: str = "auto",
     ):
         """ """
-        if not litellm.supports_function_calling(self.model_name):
-            raise ValueError(f"'{self.model_name}' does not support function calling.")
+        # if not litellm.supports_function_calling(self.model_name):
+        #     raise ValueError(f"'{self.model_name}' does not support function calling.")
 
         params = {
             "model": self.model_name,
