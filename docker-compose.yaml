@@ -19,7 +19,7 @@ services:
 
   kafka:
     container_name: kb-kafka
-    image: apache/kafka:latest
+    image: apache/kafka:3.9.1
     ports:
       - "9092:9092"
       - "29092:29092"
