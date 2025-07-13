@@ -4,9 +4,10 @@ from functools import partial
 from dotenv import load_dotenv
 from knowledge_base.di.config import BaseConfig
 from knowledge_base.di.container import Container
-from knowledge_base.app.api.health.router import health_router
-from knowledge_base.app.api.experimental.router import router as experimental_router
-from knowledge_base.app.api.knowledge.router import router as knowledge_router
+from knowledge_base.app.api.router.health import health_router
+from knowledge_base.app.api.router.experimental import router as experimental_router
+from knowledge_base.app.api.router.knowledge import router as knowledge_router
+from knowledge_base.app.api.router.mcp import router as mcp_router
 from knowledge_base.infra.logging import init_logging, shutdown_logging
 
 
@@ -19,8 +20,7 @@ async def lifespan(app: FastAPI):
     container.unwire()
     container.wire(
         modules=[
-            "knowledge_base.app.api.experimental.router",
-            "knowledge_base.app.api.knowledge.router",
+            "knowledge_base.app.api.service.knowledge",
         ]
     )
 
@@ -28,6 +28,7 @@ async def lifespan(app: FastAPI):
     app.include_router(experimental_router)
     app.include_router(health_router)
     app.include_router(knowledge_router)
+    app.include_router(mcp_router)
 
     yield
 
