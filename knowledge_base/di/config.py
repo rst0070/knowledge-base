@@ -9,7 +9,8 @@ class BaseConfig(BaseSettings):
     neo4j_password: str = "thisispasswd"
 
     # Litellm
-    gemini_api_key: str
+    gemini_api_key: str | None = None
+    vllm_api_base: str | None = None
     redis_host: str = "localhost"
     redis_port: int = 6379
 
